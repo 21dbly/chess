@@ -23,13 +23,21 @@ public class ChessPiece {
      * The various different chess piece options
      */
     public enum PieceType {
-        KING,
-        QUEEN,
-        BISHOP,
-        KNIGHT,
-        ROOK,
-        PAWN
+        KING('K'),
+        QUEEN('Q'),
+        BISHOP('B'),
+        KNIGHT('K'),
+        ROOK('R'),
+        PAWN('P');
+
+        private final char character;
+
+        PieceType(char character)
+        {
+            this.character = character;
+        }
     }
+
 
     /**
      * @return Which team this chess piece belongs to
@@ -54,5 +62,13 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         return new HashSet<ChessMove>();
+    }
+
+    @Override
+    public String toString() {
+        if (pieceColor == ChessGame.TeamColor.WHITE)
+            return String.valueOf(Character.toUpperCase(type.character));
+        else
+            return String.valueOf(Character.toLowerCase(type.character));
     }
 }

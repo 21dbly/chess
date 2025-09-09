@@ -42,4 +42,11 @@ public class ChessMove {
     public ChessPiece.PieceType getPromotionPiece() {
         return promotionPiece;
     }
+
+    @Override
+    public String toString() {
+        String promotionNote = "";
+        if (promotionPiece != null) promotionNote = String.format("(%s)",promotionPiece);
+        return String.format("%s:%s%s", startPosition, endPosition, promotionNote);
+    }
 }
