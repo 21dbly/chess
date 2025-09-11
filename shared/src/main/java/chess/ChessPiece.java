@@ -26,7 +26,7 @@ public class ChessPiece {
         KING('K'),
         QUEEN('Q'),
         BISHOP('B'),
-        KNIGHT('K'),
+        KNIGHT('N'),
         ROOK('R'),
         PAWN('P');
 
