@@ -36,6 +36,12 @@ public class ChessBoard {
         return board[position.getRow() - 1][position.getColumn() - 1];
     }
 
+    public boolean inBounds(ChessPosition position) {
+        int col = position.getColumn();
+        int row = position.getRow();
+        return 0 < col && 0 < row && row <= 8 && col <= 8;
+    }
+
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
