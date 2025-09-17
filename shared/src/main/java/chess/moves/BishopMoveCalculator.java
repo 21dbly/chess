@@ -10,7 +10,7 @@ public class BishopMoveCalculator extends PieceMoveCalculator{
     public static Collection<ChessMove> calculateMoves(ChessBoard board, ChessPosition myPosition)
     {
         var list = new ArrayList<ChessMove>();
-        list.add(new ChessMove(new ChessPosition(5, 4), new ChessPosition(6, 5)));
+        list.addAll(GetMoveInDirection(board, myPosition, new ChessPosition(1, 1)));
         return list;
     }
 }
