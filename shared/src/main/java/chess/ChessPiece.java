@@ -70,8 +70,9 @@ public class ChessPiece {
             case BISHOP -> {
                 return BishopMoveCalculator.calculateMoves(board, myPosition);
             }
-//            case KNIGHT -> {
-//            }
+            case KNIGHT -> {
+                return KnightMoveCalculator.calculateMoves(board, myPosition);
+            }
 //            case ROOK -> {
 //            }
 //            case PAWN -> {
