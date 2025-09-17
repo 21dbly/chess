@@ -15,8 +15,18 @@
 
 ### Records
 - for immutable objects like data
-- automatically overrides equals, hashcode, tostring, and getters?
+- automatically overrides equals, hashcode, toString, and getters?
 - can still add more functions
 
 ## immutability
 - safer
+
+## abstraction
+
+### interfaces
+
+- makes it easy to change the implementation
+
+### inheritance
+
+### abstract classes
