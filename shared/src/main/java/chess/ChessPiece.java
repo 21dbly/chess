@@ -74,8 +74,9 @@ public class ChessPiece {
             case KNIGHT -> {
                 return KnightMoveCalculator.calculateMoves(board, myPosition);
             }
-//            case ROOK -> {
-//            }
+            case ROOK -> {
+                return RookMoveCalculator.calculateMoves(board, myPosition);
+            }
 //            case PAWN -> {
 //            }
         }
