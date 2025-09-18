@@ -24,9 +24,29 @@
 ## abstraction
 
 ### interfaces
-
 - makes it easy to change the implementation
 
 ### inheritance
 
 ### abstract classes
+
+## JDK Collections
+- jdk contains the standard util library that you can look through
+
+## Exceptions
+```
+try {
+    // Code that may throw an exception
+} catch (Exception ex) {
+    // Code to execute if there's an exception
+} finally {
+    // Code that always gets called
+}
+```
+Try with finally built in:
+```
+// automatically closes closable thing if there's an error in the try
+try (FileInputStream input = new FileInputStream("test.txt")) {
+    
+}
+```
