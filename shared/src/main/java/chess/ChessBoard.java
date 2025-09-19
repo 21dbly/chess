@@ -25,6 +25,22 @@ public class ChessBoard {
         board[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
+    private void addPieceFromChar(ChessPosition position, Character letter) {
+        ChessGame.TeamColor color = Character.isUpperCase(letter) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+        letter = Character.toUpperCase(letter);
+        ChessPiece.PieceType type = switch (letter) {
+            case 'P' -> ChessPiece.PieceType.PAWN;
+            case 'R' -> ChessPiece.PieceType.ROOK;
+            case 'N' -> ChessPiece.PieceType.KNIGHT;
+            case 'B' -> ChessPiece.PieceType.BISHOP;
+            case 'Q' -> ChessPiece.PieceType.QUEEN;
+            case 'K' -> ChessPiece.PieceType.KING;
+            default -> null;
+        };
+        ChessPiece piece = type == null ? null : new ChessPiece(color, type);
+        addPiece(position, piece);
+    }
+
     /**
      * Gets a chess piece on the chessboard
      *
@@ -47,7 +63,32 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        setBoard("""
+                rnbqkbnr
+                pppppppp
+                ........
+                ........
+                ........
+                ........
+                PPPPPPPP
+                RNBQKBNR
+                """);
+    }
+
+    private void setBoard(String boardString) {
+        var rows = boardString.split("\n");
+        if (rows.length != 8) throw new RuntimeException("boardString has wrong number of rows");
+        int r = 8;
+        for (String row : rows) {
+            var splitRow = row.toCharArray();
+            if (splitRow.length != 8) throw new RuntimeException("a boardString row has wrong number of columns");
+            int c = 1;
+            for (Character letter : splitRow) {
+                addPieceFromChar(new ChessPosition(r, c), letter);
+                c++;
+            }
+            r--;
+        }
     }
 
     @Override
