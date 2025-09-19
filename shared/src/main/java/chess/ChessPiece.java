@@ -77,8 +77,9 @@ public class ChessPiece {
             case ROOK -> {
                 return RookMoveCalculator.calculateMoves(board, myPosition);
             }
-//            case PAWN -> {
-//            }
+            case PAWN -> {
+                return PawnMoveCalculator.calculateMoves(board, myPosition);
+            }
         }
         return new ArrayList<>();
     }
