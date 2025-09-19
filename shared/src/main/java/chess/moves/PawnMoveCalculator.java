@@ -1,9 +1,6 @@
 package chess.moves;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessMove;
-import chess.ChessPosition;
+import chess.*;
 
 import java.util.*;
 
@@ -26,8 +23,29 @@ public class PawnMoveCalculator extends PieceMoveCalculator{
                 new int[][] {{forwards, 0}}, forwardDistance,
                 new MoveStatus[] {MoveStatus.CAN_MOVE}));
 
-        // also add promotion
-        return list;
+        return withPromotions(list, color);
+    }
+
+    private static Collection<ChessMove> withPromotions(Collection<ChessMove> list, ChessGame.TeamColor color) {
+        int topRow = color == ChessGame.TeamColor.WHITE ? 8 : 1;
+        var newList = new ArrayList<ChessMove>();
+        for (var move : list) {
+            if (move.getEndPosition().getRow() == topRow) {
+                newList.addAll(getPromotionsForMove(move));
+            } else {
+                newList.add(move);
+            }
+        }
+        return newList;
+    }
+
+    private static Collection<ChessMove> getPromotionsForMove(ChessMove move) {
+        ChessPosition start = move.getStartPosition();
+        ChessPosition end = move.getEndPosition();
+        return new ArrayList<>(List.of(new ChessMove(start, end, ChessPiece.PieceType.QUEEN),
+                                       new ChessMove(start, end, ChessPiece.PieceType.KNIGHT),
+                                       new ChessMove(start, end, ChessPiece.PieceType.BISHOP),
+                                       new ChessMove(start, end, ChessPiece.PieceType.ROOK)));
     }
 
 }
