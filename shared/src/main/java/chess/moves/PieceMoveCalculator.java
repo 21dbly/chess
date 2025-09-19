@@ -6,41 +6,71 @@ import chess.ChessPiece;
 import chess.ChessPosition;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class PieceMoveCalculator {
     /**
-     * Calculates whether the piece can move to this new position, or if it is blocked
-     * by a piece or would be off the board
+     * Calculates all the positions a chess piece can move in all given directions
+     * for a given distance (ex: 8 for rooks or bishops, 1 for kings).
+     * Takes into account the board state and the current piece's color and position.
      *
-     * @param direction a ChessPosition representing the offset for the new position
-     * @return Collection containing one move if valid, or empty if not valid
+     * @param directions an array of int pairs representing the directions to check
+     * @param distance an int representing how far to keep checking (usually 1 or 8)
+     * @return Collection of valid moves
      */
-    protected static Collection<ChessMove> GetMoveInDirection(ChessBoard board, ChessPosition startPosition, ChessPosition direction) {
+    protected static Collection<ChessMove> GetMovesFromDirections(ChessBoard board, ChessPosition startPosition,
+                                                                  int[][] directions, int distance) {
+        return GetMovesFromDirections(board, startPosition, directions, distance,
+                new MoveStatus[] {MoveStatus.CAN_MOVE, MoveStatus.CAN_CAPTURE});
+    }
+
+    /**
+     * Calculates all the positions a chess piece can move in all given directions
+     * for a given distance (ex: 8 for rooks or bishops, 1 for kings).
+     * Takes into account the board state and the current piece's color and position.
+     *
+     * @param directions an array of int pairs representing the directions to check
+     * @param distance an int representing how far to keep checking (usually 1 or 8)
+     * @param validStatuses normally CAN_MOVE and CAN_CAPTURE because those are the
+     *                      cases for a valid move
+     * @return Collection of valid moves
+     */
+    protected static Collection<ChessMove> GetMovesFromDirections(ChessBoard board, ChessPosition startPosition, int[][] directions,
+                                                                  int distance, MoveStatus[] validStatuses) {
         Collection<ChessMove> list = new ArrayList<ChessMove>();
-        ChessPosition newPosition = startPosition.plus(direction);
-        if (canMove(board, startPosition, newPosition) != MoveStatus.CANNOT_MOVE)
-            list.add(new ChessMove(startPosition, newPosition));
+        for (int[] direction : directions) {
+            list.addAll(GetMovesFromSingleDirection(board, startPosition, direction, distance, validStatuses));
+        }
         return list;
     }
 
     /**
-     * Calculates all the positions a chess piece can move in one direction.
-     * Takes into account the board state and the current piece's color and position,
-     * but not its type.
+     * Calculates all the positions a chess piece can move in a direction
+     * for a given distance (ex: 8 for rooks or bishops, 1 for kings).
+     * Takes into account the board state and the current piece's color and position.
      *
-     * @param direction a ChessPosition representing the offset for the new position
-     * @return Collection of valid moves in one direction
+     * @param direction an int pair representing the row and column offset to check
+     * @param distance an int representing how far to keep checking (usually 1 or 8)
+     * @param validStatuses normally CAN_MOVE and CAN_CAPTURE because those are the
+     *                      cases for a valid move
+     * @return Collection of valid moves
      */
-    protected static Collection<ChessMove> GetAllMovesInDirection(ChessBoard board, ChessPosition startPosition, ChessPosition direction) {
+    protected static Collection<ChessMove> GetMovesFromSingleDirection(ChessBoard board, ChessPosition startPosition, int[] direction,
+                                                                  int distance, MoveStatus[] validStatuses) {
+        MoveStatus passThroughStatus = MoveStatus.CAN_MOVE;
+
         Collection<ChessMove> list = new ArrayList<ChessMove>();
         ChessPosition newPosition = startPosition;
-        while (true) {
-            newPosition = newPosition.plus(direction);
+        while (distance-- > 0) {
+            if (direction.length != 2) throw new RuntimeException("direction is not an int pair");
+
+            newPosition = newPosition.plus(direction[0], direction[1]);
             MoveStatus status = canMove(board, startPosition, newPosition);
-            if (status == MoveStatus.CANNOT_MOVE) break;
-            list.add(new ChessMove(startPosition, newPosition));
-            if (status == MoveStatus.CAN_CAPTURE) break;
+            if (Arrays.asList(validStatuses).contains(status))
+                list.add(new ChessMove(startPosition, newPosition));
+
+            if (status != passThroughStatus) break;
         }
         return list;
     }
@@ -48,7 +78,7 @@ public class PieceMoveCalculator {
     /**
      * The different options that canMove could return
      */
-    private enum MoveStatus {
+    protected enum MoveStatus {
         CANNOT_MOVE,
         CAN_MOVE,
         CAN_CAPTURE
@@ -61,7 +91,7 @@ public class PieceMoveCalculator {
      * @return MoveStatus enum representing a valid move, a valid capture,
      * or an invalid move
      */
-    private static MoveStatus canMove(ChessBoard board, ChessPosition startPosition, ChessPosition newPosition) {
+    protected static MoveStatus canMove(ChessBoard board, ChessPosition startPosition, ChessPosition newPosition) {
         if (!board.inBounds(newPosition))
             return MoveStatus.CANNOT_MOVE;
 

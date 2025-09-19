@@ -34,8 +34,11 @@ public class ChessPosition {
         return col;
     }
 
-    public ChessPosition plus(ChessPosition move) {
-        return new ChessPosition(getRow() + move.getRow(), getColumn() + move.getColumn());
+    /**
+     * @return a new ChessPosition moved by row, col
+     */
+    public ChessPosition plus(int row, int col) {
+        return new ChessPosition(getRow() + row, getColumn() + col);
     }
 
     @Override
