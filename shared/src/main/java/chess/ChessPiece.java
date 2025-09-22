@@ -61,27 +61,14 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        switch (getPieceType()) {
-            case KING -> {
-                return KingMoveCalculator.calculateMoves(board, myPosition);
-            }
-            case QUEEN -> {
-                return QueenMoveCalculator.calculateMoves(board, myPosition);
-            }
-            case BISHOP -> {
-                return BishopMoveCalculator.calculateMoves(board, myPosition);
-            }
-            case KNIGHT -> {
-                return KnightMoveCalculator.calculateMoves(board, myPosition);
-            }
-            case ROOK -> {
-                return RookMoveCalculator.calculateMoves(board, myPosition);
-            }
-            case PAWN -> {
-                return PawnMoveCalculator.calculateMoves(board, myPosition);
-            }
-        }
-        return new ArrayList<>();
+        return switch (getPieceType()) {
+            case KING -> KingMoveCalculator.calculateMoves(board, myPosition);
+            case QUEEN -> QueenMoveCalculator.calculateMoves(board, myPosition);
+            case BISHOP -> BishopMoveCalculator.calculateMoves(board, myPosition);
+            case KNIGHT -> KnightMoveCalculator.calculateMoves(board, myPosition);
+            case ROOK -> RookMoveCalculator.calculateMoves(board, myPosition);
+            case PAWN -> PawnMoveCalculator.calculateMoves(board, myPosition);
+        };
     }
 
     @Override
