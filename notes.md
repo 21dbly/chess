@@ -50,3 +50,67 @@ try (FileInputStream input = new FileInputStream("test.txt")) {
     
 }
 ```
+## Domain Driven Design
+- Object Oriented Design
+  - properties/fields: things they are/have
+  - methods: things they do
+
+- Focus on the domain the objects are in to know what to represent
+- Sequence Diagram
+
+- Relationships:
+  - is-a: usually inheritance, extending
+  - has-a: usually encapsulation, field
+  - uses-a: transient association, method parameter
+
+- Decomposition: break into pieces
+  - we can't keep big things in our head. Just the small things
+
+- Simplicity
+  - should be as simple as possible, but not simpler - Einstein
+
+- YAGNI: You're not going to need it
+  - always implement things when you actually need them, never when you just foresee that you need them.
+  - don't pre-optimize
+
+- DRY: don't repeat yourself
+
+- High cohesion low coupling
+  - cohesion: object has a clear single purpose for the domain
+  - coupling: objects depend on other objects
+
+### Solid
+
+S ingle responsibility - a module should be responsible to one, and only one, actor\
+O pen closed - open to extension, closed to modification\
+L iskov substitution - keep the expectations of an interface\
+I nterface segregation - don't force clients to depend on methods they don't need\
+D ependency inversion - High-level modules should not depend on low-level modules. Both should depend on abstractions
+
+### Pola: Principle of least astonishment
+- if your code would make someone astonished, it violates Pola
+
+## Inner classes
+
+- Static inner classes
+- non-static inner classes
+- local inner classes
+  - closure: close around surrounding creation space
+  - factories: like constructors but more flexible
+- anonymous classes
+```java
+var instance = new Interface() {
+    public String method() {
+        return "stuff";
+    }
+};
+```
+- lambda functions: concise anonymous closures
+  - interface has only one method defined: functional interface
+```
+interface Speaker {
+    String sayHello();
+}
+
+speak(() -> "hello");
+```
