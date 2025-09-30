@@ -114,3 +114,10 @@ interface Speaker {
 
 speak(() -> "hello");
 ```
+
+## IO
+`System.in.read()`
+`System.out.println()`
+
+## Generics
+`ArrayList<Integer>`
