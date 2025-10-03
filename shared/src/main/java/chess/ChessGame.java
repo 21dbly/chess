@@ -48,7 +48,7 @@ public class ChessGame {
 
     /**
      * Gets a valid moves for a piece at the given location
-     * taking into account checks and team turn
+     * taking into account checks but not team turn
      *
      * @param startPosition the piece to get valid moves for
      * @return Set of valid moves for requested piece, or null if no piece at
@@ -59,7 +59,6 @@ public class ChessGame {
         ChessPiece piece = board.getPiece(startPosition);
 
         if (piece == null) return validMoves;
-        if (piece.getTeamColor() != turn) return validMoves;
 
         Collection<ChessMove> moves = piece.pieceMoves(board, startPosition);
         for (ChessMove move : moves) {
@@ -72,15 +71,19 @@ public class ChessGame {
     }
 
     /**
-     * Makes a move in a chess game (if move is valid)
+     * Makes a move in a chess game (if move is valid and it's the correct team turn)
      *
      * @param move chess move to perform
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        if (!validMoves(move.getStartPosition()).contains(move)) {
-            throw new InvalidMoveException();
-        }
+        ChessPiece piece = board.getPiece(move.getStartPosition());
+        if (piece == null)
+            throw new InvalidMoveException("No Piece");
+        if (piece.getTeamColor() != turn)
+            throw new InvalidMoveException("Out of turn");
+        if (!validMoves(move.getStartPosition()).contains(move))
+            throw new InvalidMoveException("Invalid move");
         board.movePiece(move);
         switchTurn();
     }
@@ -104,6 +107,7 @@ public class ChessGame {
         for (ChessPosition position : board) {
             ChessPiece piece = board.getPiece(position);
             if (piece == null) continue;
+            if (piece.getTeamColor() == teamColor) continue;
             var moves = piece.pieceMoves(board, position);
             if (moves.stream().anyMatch(move -> move.getEndPosition().equals(kingPos)))
                 return true;
@@ -131,7 +135,7 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         if (teamColor != turn) return false; // can't be in checkmate if not your turn
-        return isInCheck(teamColor) && !hasAvailableMoves();
+        return isInCheck(teamColor) && !hasAvailableMoves(teamColor);
     }
 
     /**
@@ -143,7 +147,7 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         if (teamColor != turn) return false; // can't be in stalemate if not your turn?
-        return !isInCheck(teamColor) && !hasAvailableMoves();
+        return !isInCheck(teamColor) && !hasAvailableMoves(teamColor);
     }
 
     /**
@@ -151,8 +155,11 @@ public class ChessGame {
      *
      * @return True if the active team has moves, otherwise false
      */
-    private boolean hasAvailableMoves() {
+    private boolean hasAvailableMoves(TeamColor teamColor) {
         for (ChessPosition position : board) {
+            ChessPiece piece = board.getPiece(position);
+            if (piece == null) continue;
+            if (piece.getTeamColor() != teamColor) continue;
             if (!validMoves(position).isEmpty())
                 return true;
         }
