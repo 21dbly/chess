@@ -12,7 +12,7 @@ import java.util.*;
 public class ChessPiece {
 
     private final ChessGame.TeamColor pieceColor;
-    private final PieceType type;
+    private PieceType type;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
@@ -74,6 +74,10 @@ public class ChessPiece {
             case ROOK -> RookMoveCalculator.calculateMoves(board, myPosition);
             case PAWN -> PawnMoveCalculator.calculateMoves(board, myPosition);
         };
+    }
+
+    public void promote(PieceType type) {
+        this.type = type;
     }
 
     @Override

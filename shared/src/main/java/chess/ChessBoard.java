@@ -42,9 +42,11 @@ public class ChessBoard implements Iterable<ChessPosition> {
     public void movePiece(ChessMove move) {
         ChessPosition start = move.getStartPosition();
         ChessPosition end = move.getEndPosition();
+        ChessPiece.PieceType promotion = move.getPromotionPiece();
         ChessPiece piece = getPiece(start);
         addPiece(end, piece);
         addPiece(start, null);
+        if (promotion != null) piece.promote(promotion);
     }
 
     private void addPieceFromChar(ChessPosition position, Character letter) {

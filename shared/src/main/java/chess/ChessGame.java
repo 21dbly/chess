@@ -57,7 +57,10 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ArrayList<ChessMove> validMoves = new ArrayList<>();
         ChessPiece piece = board.getPiece(startPosition);
+
         if (piece == null) return validMoves;
+        if (piece.getTeamColor() != turn) return validMoves;
+
         Collection<ChessMove> moves = piece.pieceMoves(board, startPosition);
         for (ChessMove move : moves) {
             ChessBoard boardCopy = new ChessBoard(board);
@@ -75,9 +78,9 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-//        if (!validMoves(move.getStartPosition()).contains(move)) {
-//            throw new InvalidMoveException();
-//        }
+        if (!validMoves(move.getStartPosition()).contains(move)) {
+            throw new InvalidMoveException();
+        }
         board.movePiece(move);
         switchTurn();
     }
