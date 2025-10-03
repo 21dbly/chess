@@ -2,6 +2,7 @@ package chess;
 
 import jdk.jshell.spi.ExecutionControl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -54,8 +55,17 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        ChessBoard boardCopy = new ChessBoard(board);
-        throw new RuntimeException("Not implemented");
+        ArrayList<ChessMove> validMoves = new ArrayList<>();
+        ChessPiece piece = board.getPiece(startPosition);
+        if (piece == null) return validMoves;
+        Collection<ChessMove> moves = piece.pieceMoves(board, startPosition);
+        for (ChessMove move : moves) {
+            ChessBoard boardCopy = new ChessBoard(board);
+            boardCopy.movePiece(move);
+            if (!isInCheck(piece.getTeamColor(), boardCopy))
+                validMoves.add(move);
+        }
+        return validMoves;
     }
 
     /**
@@ -83,7 +93,11 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        ChessPosition kingPos = findKingPosition(teamColor);
+        return isInCheck(teamColor, board);
+    }
+
+    private static boolean isInCheck(TeamColor teamColor, ChessBoard board) {
+        ChessPosition kingPos = findKingPosition(teamColor, board);
         for (ChessPosition position : board) {
             ChessPiece piece = board.getPiece(position);
             if (piece == null) continue;
@@ -94,7 +108,7 @@ public class ChessGame {
         return false;
     }
 
-    private ChessPosition findKingPosition(TeamColor teamColor) {
+    private static ChessPosition findKingPosition(TeamColor teamColor, ChessBoard board) {
         for (ChessPosition position : board) {
             ChessPiece piece = board.getPiece(position);
             if (piece == null) continue;
