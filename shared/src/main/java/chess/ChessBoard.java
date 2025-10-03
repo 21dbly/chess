@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Objects;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessBoard {
+public class ChessBoard implements Iterable<ChessPosition> {
     final private ChessPiece[][] board = new ChessPiece[8][8];
     public ChessBoard() {
         
@@ -116,5 +117,36 @@ public class ChessBoard {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(board);
+    }
+
+    @Override
+    public Iterator<ChessPosition> iterator() {
+        return new ChessBoardIterator();
+    }
+
+    private static class ChessBoardIterator implements Iterator<ChessPosition> {
+        int row;
+        int col;
+        public ChessBoardIterator() {
+            row = 1;
+            col = 1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return row <= 8 && col <= 8;
+        }
+
+        @Override
+        public ChessPosition next() {
+            ChessPosition position = new ChessPosition(row, col);
+            if (row >= 8) {
+                row = 1;
+                col++;
+            } else {
+                row++;
+            }
+            return position;
+        }
     }
 }
