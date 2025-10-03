@@ -25,6 +25,19 @@ public class ChessBoard {
         board[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
+    /**
+     * Moves a piece according to move
+     *
+     * @param move includes the start and end positions
+     */
+    public void movePiece(ChessMove move) {
+        ChessPosition start = move.getStartPosition();
+        ChessPosition end = move.getEndPosition();
+        ChessPiece piece = getPiece(start);
+        addPiece(end, piece);
+        addPiece(start, null);
+    }
+
     private void addPieceFromChar(ChessPosition position, Character letter) {
         ChessGame.TeamColor color = Character.isUpperCase(letter) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
         letter = Character.toUpperCase(letter);
