@@ -65,6 +65,7 @@ try (FileInputStream input = new FileInputStream("test.txt")) {
 
 - Decomposition: break into pieces
   - we can't keep big things in our head. Just the small things
+  - decompose based on domain
 
 - Simplicity
   - should be as simple as possible, but not simpler - Einstein
