@@ -16,6 +16,14 @@ public class ChessBoard implements Iterable<ChessPosition> {
         
     }
 
+    public ChessBoard(ChessBoard other) {
+        for (ChessPosition position : this) {
+            ChessPiece otherPiece = other.getPiece(position);
+            if (otherPiece != null)
+                addPiece(position, new ChessPiece(otherPiece));
+        }
+    }
+
     /**
      * Adds a chess piece to the chessboard
      *
@@ -149,4 +157,6 @@ public class ChessBoard implements Iterable<ChessPosition> {
             return position;
         }
     }
+
+
 }

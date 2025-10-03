@@ -1,5 +1,7 @@
 package chess;
 
+import jdk.jshell.spi.ExecutionControl;
+
 import java.util.Collection;
 import java.util.Objects;
 
@@ -52,6 +54,7 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+        ChessBoard boardCopy = new ChessBoard(board);
         throw new RuntimeException("Not implemented");
     }
 
