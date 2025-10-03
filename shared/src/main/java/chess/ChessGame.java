@@ -45,6 +45,7 @@ public class ChessGame {
 
     /**
      * Gets a valid moves for a piece at the given location
+     * taking into account checks and team turn
      *
      * @param startPosition the piece to get valid moves for
      * @return Set of valid moves for requested piece, or null if no piece at
@@ -55,7 +56,7 @@ public class ChessGame {
     }
 
     /**
-     * Makes a move in a chess game
+     * Makes a move in a chess game (if move is valid)
      *
      * @param move chess move to perform
      * @throws InvalidMoveException if move is invalid
@@ -65,6 +66,11 @@ public class ChessGame {
 //            throw new InvalidMoveException();
 //        }
         board.movePiece(move);
+        switchTurn();
+    }
+
+    private void switchTurn() {
+        turn = turn == TeamColor.WHITE? TeamColor.BLACK : TeamColor.WHITE;
     }
 
     /**
@@ -74,7 +80,27 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        ChessPosition kingPos = findKingPosition(teamColor);
+        for (ChessPosition position : board) {
+            ChessPiece piece = board.getPiece(position);
+            if (piece == null) continue;
+            var moves = piece.pieceMoves(board, position);
+            if (moves.contains(new ChessMove(position, kingPos)))
+                return true;
+        }
+        return false;
+    }
+
+    private ChessPosition findKingPosition(TeamColor teamColor) {
+        for (ChessPosition position : board) {
+            ChessPiece piece = board.getPiece(position);
+            if (piece == null) continue;
+            if (piece.getPieceType() == ChessPiece.PieceType.KING &&
+                    piece.getTeamColor() == teamColor) {
+                return position;
+            }
+        }
+        throw new RuntimeException("No " + teamColor.name() + " King found");
     }
 
     /**
