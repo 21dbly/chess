@@ -105,7 +105,7 @@ public class ChessGame {
             ChessPiece piece = board.getPiece(position);
             if (piece == null) continue;
             var moves = piece.pieceMoves(board, position);
-            if (moves.contains(new ChessMove(position, kingPos)))
+            if (moves.stream().anyMatch(move -> move.getEndPosition().equals(kingPos)))
                 return true;
         }
         return false;
@@ -130,7 +130,8 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if (teamColor != turn) return false; // can't be in checkmate if not your turn
+        return isInCheck(teamColor) && !hasAvailableMoves();
     }
 
     /**
@@ -141,7 +142,21 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if (teamColor != turn) return false; // can't be in stalemate if not your turn?
+        return !isInCheck(teamColor) && !hasAvailableMoves();
+    }
+
+    /**
+     * Checks if the active team has moves available
+     *
+     * @return True if the active team has moves, otherwise false
+     */
+    private boolean hasAvailableMoves() {
+        for (ChessPosition position : board) {
+            if (!validMoves(position).isEmpty())
+                return true;
+        }
+        return false;
     }
 
     /**
