@@ -122,3 +122,22 @@ speak(() -> "hello");
 
 ## Generics
 `ArrayList<Integer>`
+
+## HTTP
+doing verbs on resources
+- GET: Get an existing resource (no body)
+- POST: Create a new resource
+- PUT: Update an existing resource
+- DELETE: Delete a resource
+- OPTIONS: Get information about a resource
+
+### Status codes:
+2xx: 200 Success, 204 No Content
+3xx: 301/302 redirect, 304 not modified
+4xx: 400 bad request
+     404 not found, 403 forbidden
+     429 Too many requests
+5xx: 500 server error, 503 not available
+
+### Javalin
+- java web framework
