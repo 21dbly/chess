@@ -1,5 +1,6 @@
 package chess;
 
+import chess.moves.KingMoveCalculator;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.util.ArrayList;
@@ -67,6 +68,10 @@ public class ChessGame {
             if (!isInCheck(piece.getTeamColor(), boardCopy))
                 validMoves.add(move);
         }
+
+        if (piece.getPieceType() == ChessPiece.PieceType.KING)
+            validMoves.addAll(KingMoveCalculator.calculateCastleMoves(board, startPosition));
+
         return validMoves;
     }
 
