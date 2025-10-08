@@ -42,9 +42,23 @@ public class ChessBoard implements Iterable<ChessPosition> {
         ChessPosition end = move.getEndPosition();
         ChessPiece.PieceType promotion = move.getPromotionPiece();
         ChessPiece piece = getPiece(start);
+
         addPiece(end, piece);
         addPiece(start, null);
+
+        piece.setMoved();
+
         if (promotion != null) piece.promote(promotion);
+
+        // R...K..R
+        // ..KR.RK.
+        if (piece.getPieceType() == ChessPiece.PieceType.KING) {
+            int horizMovement = end.getColumn() - start.getColumn();
+            if (horizMovement == 2)
+                movePiece(new ChessMove(start.plus(0,3), start.plus(0, 1)));
+            else if (horizMovement == -2)
+                movePiece(new ChessMove(start.plus(0,-4), start.plus(0, -1)));
+        }
     }
 
     private void addPieceFromChar(ChessPosition position, Character letter) {

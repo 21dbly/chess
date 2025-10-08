@@ -31,20 +31,20 @@ public class KingMoveCalculator extends PieceMoveCalculator{
         if (col1Rook != null &&
                 col1Rook.getPieceType() == ChessPiece.PieceType.ROOK &&
                 col1Rook.getTeamColor() == color &&
-                !col1Rook.hasMoved())
-            if (board.getPiece(myPosition.plus(0, -1)) == null &&
+                !col1Rook.hasMoved() &&
+                board.getPiece(myPosition.plus(0, -1)) == null &&
                 board.getPiece(myPosition.plus(0, -2)) == null &&
                 board.getPiece(myPosition.plus(0, -3)) == null)
-                list.add(new ChessMove(myPosition, myPosition.plus(0, -2)));
+            list.add(new ChessMove(myPosition, myPosition.plus(0, -2)));
 
         ChessPiece col8Rook = board.getPiece(new ChessPosition(backRow, 8));
         if (col8Rook != null &&
                 col8Rook.getPieceType() == ChessPiece.PieceType.ROOK &&
                 col8Rook.getTeamColor() == color &&
-                !col8Rook.hasMoved())
-            if (board.getPiece(myPosition.plus(0, 1)) == null &&
-                    board.getPiece(myPosition.plus(0, 2)) == null)
-                list.add(new ChessMove(myPosition, myPosition.plus(0, 2)));
+                !col8Rook.hasMoved() &&
+                board.getPiece(myPosition.plus(0, 1)) == null &&
+                board.getPiece(myPosition.plus(0, 2)) == null)
+            list.add(new ChessMove(myPosition, myPosition.plus(0, 2)));
 
         return list;
     }
