@@ -70,9 +70,41 @@ public class ChessGame {
         }
 
         if (piece.getPieceType() == ChessPiece.PieceType.KING)
-            validMoves.addAll(KingMoveCalculator.calculateCastleMoves(board, startPosition));
+        {
+            var castleMoves = KingMoveCalculator.calculateCastleMoves(board, startPosition);
+            for (var move : castleMoves) {
+                if (validCastle(move))
+                    validMoves.add(move);
+            }
+        }
 
         return validMoves;
+    }
+
+    /**
+     * Checks if a castle would go through check, out of check, or into check
+     *
+     * @param move castling move to check
+     * @return true if it's valid, false if there's a check
+     */
+    private boolean validCastle(ChessMove move)
+    {
+        ChessPosition start = move.getStartPosition();
+        TeamColor color = board.getPiece(start).getTeamColor();
+        ChessPosition end = move.getEndPosition();
+        int direction = Integer.signum(end.getColumn() - start.getColumn());
+
+        ChessPosition pos = start;
+        while (true)
+        {
+            ChessBoard boardCopy = new ChessBoard(board);
+            if (!pos.equals(start)) boardCopy.movePiece(new ChessMove(start, pos));
+            if (isInCheck(color, boardCopy))
+                return false;
+            if (pos.equals(end)) break; // break after checking for check at end
+            pos = pos.plus(0, direction);
+        }
+        return true;
     }
 
     /**

@@ -183,15 +183,31 @@ public class ChessBoard implements Iterable<ChessPosition> {
         @Override
         public ChessPosition next() {
             ChessPosition position = new ChessPosition(row, col);
-            if (row >= 8) {
-                row = 1;
-                col++;
-            } else {
+            if (col >= 8) {
+                col = 1;
                 row++;
+            } else {
+                col++;
             }
             return position;
         }
     }
 
-
+    @Override
+    public String toString() {
+        String[] rows = new String[8];
+        Arrays.fill(rows, "");
+        for (var position : this)
+        {
+            ChessPiece piece = getPiece(position);
+            String pieceString = piece == null ? "." : piece.toString();
+            rows[position.getRow() - 1] += pieceString;
+        }
+        StringBuilder retStr = new StringBuilder();
+        for (int i = 7; i >= 0; i--)
+        {
+            retStr.append(rows[i]).append("\n");
+        }
+        return retStr.toString();
+    }
 }
