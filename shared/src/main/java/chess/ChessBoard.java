@@ -43,6 +43,15 @@ public class ChessBoard implements Iterable<ChessPosition> {
         ChessPiece.PieceType promotion = move.getPromotionPiece();
         ChessPiece piece = getPiece(start);
 
+        // move for en passant
+        if (piece.getPieceType() == ChessPiece.PieceType.PAWN &&
+                start.getColumn() != end.getColumn() &&
+                getPiece(end) == null)
+        {
+            // capture en passanted pawn
+            addPiece(new ChessPosition(start.getRow(), end.getColumn()), null);
+        }
+
         addPiece(end, piece);
         addPiece(start, null);
 
@@ -50,6 +59,7 @@ public class ChessBoard implements Iterable<ChessPosition> {
 
         if (promotion != null) piece.promote(promotion);
 
+        // move for castling
         // R...K..R
         // ..KR.RK.
         if (piece.getPieceType() == ChessPiece.PieceType.KING) {
