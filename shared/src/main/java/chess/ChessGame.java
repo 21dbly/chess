@@ -85,6 +85,7 @@ public class ChessGame {
         if (!validMoves(move.getStartPosition()).contains(move))
             throw new InvalidMoveException("Invalid move");
         board.movePiece(move);
+        piece.setMoved();
         switchTurn();
     }
 

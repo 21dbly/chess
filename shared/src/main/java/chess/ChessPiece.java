@@ -13,15 +13,18 @@ public class ChessPiece {
 
     private final ChessGame.TeamColor pieceColor;
     private PieceType type;
+    private boolean hasMoved;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
         this.type = type;
+        this.hasMoved = false;
     }
 
     public ChessPiece(ChessPiece other) {
         this.pieceColor = other.pieceColor;
         this.type = other.type;
+        this.hasMoved = other.hasMoved;
     }
 
     /**
@@ -78,6 +81,14 @@ public class ChessPiece {
 
     public void promote(PieceType type) {
         this.type = type;
+    }
+
+    public boolean hasMoved() {
+        return hasMoved;
+    }
+
+    public void setMoved() {
+        hasMoved = true;
     }
 
     @Override
