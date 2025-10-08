@@ -1,8 +1,6 @@
 package chess;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -113,6 +111,27 @@ public class ChessBoard implements Iterable<ChessPosition> {
             }
             r--;
         }
+    }
+
+    public ChessPosition findKingPosition(ChessGame.TeamColor teamColor) {
+        var positions = findPieces(ChessPiece.PieceType.KING, teamColor);
+        if (positions.isEmpty())
+            throw new RuntimeException("No " + teamColor.name() + " King found");
+        if (positions.size() > 1)
+            throw new RuntimeException("Multiple " + teamColor.name() + " Kings found");
+        return positions.iterator().next(); // get first (and only) position
+    }
+
+    private Collection<ChessPosition> findPieces(ChessPiece.PieceType pieceType, ChessGame.TeamColor color) {
+        ArrayList<ChessPosition> list = new ArrayList<>();
+        for (ChessPosition position : this) {
+            ChessPiece piece = getPiece(position);
+            if (piece == null) continue;
+            if (piece.getPieceType() == pieceType && piece.getTeamColor() == color) {
+                list.add(position);
+            }
+        }
+        return list;
     }
 
     @Override

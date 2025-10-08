@@ -104,7 +104,7 @@ public class ChessGame {
     }
 
     private static boolean isInCheck(TeamColor teamColor, ChessBoard board) {
-        ChessPosition kingPos = findKingPosition(teamColor, board);
+        ChessPosition kingPos = board.findKingPosition(teamColor);
         for (ChessPosition position : board) {
             ChessPiece piece = board.getPiece(position);
             if (piece == null) continue;
@@ -116,17 +116,6 @@ public class ChessGame {
         return false;
     }
 
-    private static ChessPosition findKingPosition(TeamColor teamColor, ChessBoard board) {
-        for (ChessPosition position : board) {
-            ChessPiece piece = board.getPiece(position);
-            if (piece == null) continue;
-            if (piece.getPieceType() == ChessPiece.PieceType.KING &&
-                    piece.getTeamColor() == teamColor) {
-                return position;
-            }
-        }
-        throw new RuntimeException("No " + teamColor.name() + " King found");
-    }
 
     /**
      * Determines if the given team is in checkmate
