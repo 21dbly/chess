@@ -1,6 +1,5 @@
 [![Sequence Diagram](10k-architecture.png)](
-https://sequencediagram.org/index.html#initialData=IYYwLg9gTgBAwgGwJYFMB2YBQAHYUxIhK4YwDKKUAbpTngUSWDABLBoAmCtu+hx7ZhWqEUdPo0EwAIsDDAAgiBAoAzqswc5wAEbBVKGBx2ZM6MFACeq3ETQBzGAAYAdAA5M9qBACu2AMQALADMbgBMAJwgMP7I9gAWYDoIPoYASij2SKoWckgQaJiIqKQAtAB85JQ0UABcMADaAAoA8mQAKgC6MAD0PgZQADpoAN4ARP2UaMAAtihjtWMwYwA0y7jqAO7QHAtLq8soM8BICHvLAL6YwjUwFazsXJT145NQ03PnB2MbqttQu0WyzWYyOJzOQLGVzYnG4sHuN1E9SgmWyYEoAAoMlkcpQMgBHVI5ACU12qojulVk8iUKnU9XsKDAAFUBhi3h8UKTqYplGpVJSjDpagAxJCcGCsyg8mA6SwwDmzMQ6FHAADWkoGME2SDA8QVA05MGACFVHHlKAAHmiNMY7vcebT+fUpVAeZhHXz1PbKoiVC6Bu6-YZSgjqs8YApTShgOb2ur0ABRS0qbAEApk6iUH3wZDmeqBJzBYbjObqYCMhbLRNQbx1A1TJXG6Ox+XyNXoKFmTiaHQ5z101T1NA+BAID3aJ3e0O+8n+mAjseZqgUh2Tr1DkCq9Gu9mB7Tc9eDwXGWoKDgcTXS7TL1dUo-Orcx9EKHx6jHAN-xHmHmkbk-Cuel6vnqQZziG9wwk89bYmieJqKOWBQXCOY3BGryGkqSz1PsIKfnq7QQB2aDYcslzLtmM65iUYD1GEThOCWEyYZ8MA4cCyz4fEhHEaR+xXOgHCmF4vgBNA7CMjEIpwIm0hwAoMAADIQFkhTFOYgpofWzRtF0vQGOo+RoCWipzGsvz-BwVxaYKyHoaZKDmfofw7NCjwoWGIjzspqkYj54oEkSYCksGgoDs6MCMiybIOb+vLHvcp5ihKroynKDbvEqmAqjGGqutqur6g5RgQGoC4QMwVpor2-YPvSC6juO4XTp5K7zou46hVRWn1AAkmgIDQCi4CupyyapumhQ2VR6kYAWTgAIxMWWqgVvMOE1nW9TFRwpUCmgFUwFVORdoJNVUc1Q5Xm6N6Xah4EBte8jZaqGrioNtYoOAMAWTst4qPdWb1sy0xftASAAF4oBw40oGmRkUfC9yzbRMCFktoxjCta1VmMm3QNtoN6uDUO7AJPZdfef6DrUT5yCgIHxB+X4-hO1P8gBZ4XpGLM3l1kHuRG-loBkqiIZgdlI7OQMvMxjasex3xcTxnZsWRXbTcjeZzTA9GMZjDl8RxYzK0RquK+TQmeN4fj+F4KDoDEcSJPbjs+b4WAo5p4badIiaKYm7SJt0PQGaoRnDKbxGI7Zgv1lH6AS3H3teSg9Tu2+GKMyraAheBYV1VdKIzBANCMzyzMEWbuds-FHOJcKGQlzQPOgdosrygnhQ5eqMD9VQJpIMBX45+da7s-VABm4K11OArdQ9MDT6c-0QdLNQukT8Qk9DMczdrqPo8t-I4xttYEwqW872T3ZCXaF2F-UYsbrP-4L6nT8+C--OVJLn8v5LQGG8YAjGsj7HMKM6IMRLFcW+wkbYBBRJefw2BxQakUmiGAABxJUGgvatQjA0LBgcQ72CVJHEe1c96-zjvULuSdYSUXXkiJSaIcFlizpQ4iedU4FwnldLiO9K7cWrnFOenNkrDzbvIDuxouGJx7hqfug8pEiOjvfcedd6odVfglVqLDl6dXzu-YBINBFQEhrvTWlRIFo0WsfcslYz5bUvuYyxN8zoaKploq65dbqFyASw5+g5V58J8QyJk7C1AYjEW-Sop4YCSMjGObBuCx7eLnvUIhSoZTIByJ0XR9d9HzmyXMXJaICk-weIw+sGCchRNUKLcWgCTHoVKSgcp+SwFAwgQfKB+sRjtM6WATolt4GiX8BwAA7BEJwKAnAxETMEOAMkABs8BtyGCiTAIoB8U7AJ0h0Uh5Ct45xLGQuYAA5JU3TbgCxqXQ+RhQWnMPnHATZUSMTvOfCgKJgU1DBVCZozJcjiYWKhsInOsSErxOFEkvxMj0r0MUX3NAA9kCqNHl4mQj8GpLjuiYgxM8qk9UlFfcFVjwH7xovNDGpYT5OOrOfesPhyXuNOj2bFl16gIuAIUlqry04wGCfyIFGSNz1DpuiT5FyUDXLmNC+usL6jfPpqkuYBU9SRSVPKsQXLcVRPdAS4pQrZW9WkEC+50EVUfKVE0hASFk6tPrCMM10h6gLTCMEQItzKJaxpbraBow3Ueq9T6uB1sJmWBQGOCAmwnZIASGAaNsb40ACkIDinVYYfwyRQBql2TRfZhCmjMj0j0WVFCq7ERLNgBAwBo1QDgBABA0A1hurGZG22XgG0JqTT2+UiAYywGANgOthA8gFB2fg9ehC-YByDiHYwcCgA
-)
+https://sequencediagram.org/index.html#initialData=IYYwLg9gTgBAwgGwJYFMB2YBQAHYUxIhK4YwDKKUAbpTngUSWDABLBoAmCtu+hx7ZhWqEUdPo0EwAIsDDAAgiBAoAzqswc5wAEbBVKGBx2ZM6MFACeq3ETQBzGAAYAdAA5M9qBACu2AMQALADMbgBMAJwgMP7I9gAWYDoIPoYASij2SKoWckgQaJiIqKQAtAB85JQ0UABcMADaAAoA8mQAKgC6MAD0PgZQADpoAN4ARP2UaMAAtihjtWMwYwA0y7jqAO7QHAtLq8soM8BICHvLAL6YwjUwFazsXJT145NQ03PnB2MbqttQu0WyzWYyOJzOQLGVzYnG4sHuN1E9SgmWyYEoAAoMlkcpQMgBHVI5ACU12qojulVk8iUKnU9XsKDAAFUBhi3h8UKTqYplGpVJSjDpagAxJCcGCsyg8mA6SwwDmzMQ6FHAADWkoGME2SDA8QVA05MGACFVHHlKAAHmiNMY7vcebT+fUpVAeZhHXz1PbKoiVC6Bu6-YZSgjqs8YApTShgOb2ur0ABRS0qbAEApk6iUH3wZDmeqBJzBYbjObqYCMhbLRNQbx1A1TJXG6Ox+XyNXoKFmTiaHQ5z101T1NA+BAID3aJ3e0O+8n+mAjseZqgUh2Tr1DkCq9Gu9mB7Tc9eDwXGWoKDgcTXS7TL1dUo-Orcx9EKHx6jHAN-xHmHmkbk-Cuel6vnqQZziG9wwk89bYmieJqKOWBQXCOY3BGryGkqSz1PsIKfnq7QQB2aDYcslzLtmM65iUYD1GEThOCWEyYZ8MA4cCyz4fEhHEaR+xXOgHCmF4vgBNA7CMjEIpwIm0hwAoMAADIQFkhTFOYgpofWzRtF0vQGOo+RoCWipzGsvz-BwVxaYKyHoaZKDmfofw7NCjwoWGIjzspqkYj54oEkSYCksGgoDs6MCMiybIOb+vLHvcp5ihKroynKDbvEqmAqjGGqutqur6g5RgQGoC4QMwVpor2-YPvSC6juO4XTp5K7zou46hVRWn1AAkmgIDQCi4CupyyapumhQ2VR6kYAWTgAIxMWWqgVvMOE1nW9TFRwpUCmgFUwFVORdoJNVUc1Q5Xm6N6Xah4EBte8jZaqGrioNtYoOAMAWTst4qPdWb1sy0xftASAAF4oBw40oGmRkUfC9yzbRMCFktoxjCta1VmMm3QNtoN6uDUO7AJPZdfef6DrUT5yCgIHxB+X4-hO1P8gBZ4XpGLM3l1kHuRG-loBkqiIZgdlI7OQMvMxjasex3xcTxnZsWRXbTcjeZzTA9GMZjDl8RxYzK0RquK+TQmeN4fj+F4KDoDEcSJPbjs+b4WAo5p4badIiaKYm7SJt0PQGaoRnDKbxGI7Zgv1lH6AS3H3teSg9Tu2+GKMyraAheBYV1VdKIzBANCMzyzMEWbuds-FHOJcKGQlzQPOgdosrygnhQ5eqMD9VQJpIMBX45+da7s-VABm4K11OArdQ9MDT6c-0QdLNQukT8Qk9DsPwxmmuVCj80Y6W-I4xttYEwqW872T3ZCXaF2F-UYsbrP-4L6nr8+O--OVJLH+79JaAw3jAEY1kfY5mPrrBiJYrgP2EjbAIKJLz+GwOKDUik0QwAAOJKg0F7VqEYGi4MDiHewSpI4j2rjHAWsIIxdyTgw+E68kRKTRPgssWcaHETzqnAuE8rpcR3pXbi1c4pz05slYebd5Ad2NLwxOPcNT90HrI8R0cn7jzrvVDqH8EqtXYcvTq+cv5gJBiIqAkNd4pjhpNOhWsaIn2WufSsl8to3ysTY++Z1tFU10Vdcut1C6gPYW-Qcq9BGBIZEyLhagMSSM-pUU8MAZGRjHHgghY8Alz3qKQpUMpkA5E6AY+uRj5wFLmEUtEpT-4PBYenThBDRbixAeY9CVSUA1JKZAoG0Dtaoz1iWLpPSwCdEtkg0S-gOAAHYIhOBQE4GIiZghwBkgANngNuQw8SYBFEGSnMBOkOgUKoVvHOJZKFzAAHJKj6bceh0F6hMPaWw+ccAdnxIxJ858KB4mBTUMFKJOi8mKOJtYqGYic5JISik4U6TgnyPSkwlRfc0AD2QBo0e-iZAvwakuO65jjEz3qT1SUt9IW2ImgjQ+1F8xo0Wq48s7jqxX3rD4SlPjTo9lxZdeoSLgBlJau8tOMAIn8hBbkjc9Q6bom+dclAdy5iwvrvC+ovz6ZZLmAVPUkUlTKrEHy-F8T3REoqWKxVvVpAgqeXCDVXylStIQEhZOHT6wjCtdIeoC0wjBECA8yiTiGXDNGF6n1fqA2IOttMywKAxwQE2E7JACQwBxoTUmgAUhAcU2rDD+GSKANUByaJHJIU0ZkekeiKuoVXYiJZsAIGAHGqAcAIAIGgGsL1gbWENOeeCzR6AG1NpbW2jtUAu1KmtW5FhRz2HZvFN8hdaAAUoEJEC-hbUQzSppgO0RXdVXTnVYi3myLO5KO7q9dFmKh6t0HYUY1QjhyNWFfPC19QTG2vXhGSxYMqUwzsfvKaUCZqDJcZjbGrK8bssJt40mPLH59mfk+u9ZrQnEvnBK9QUq8Uoaigqqd0hD3z3VWk8Ul49npS9S9XKMBxQ3svNRx9MSCVNXQ++1jX6qgyzzdIPaNyKrJjRHvBxdKYGFmLBBtx602WeMVSVMqB1KrWhOpM5jYLTUhKEWE+cmnnposVT0Qa47mxmjbAmYDAj3X1HifGYiInaUgeDTrCTPQpMspk9BzxJozMwHbJ2SZlNcMsb8FoeVSoMRerWLFV9nNJTYDC7spsVHCPDB1HqhyXHAHit-pE9pxCPU9oGc42B+sIHRpErbLwzbk2puq-KRAMZYDAGwI2wgeQCj7KId+32-tA7B16MYRBQA)
 ```
 actor Client
 participant Server
@@ -67,7 +66,7 @@ DataAccess -> db:Remove AuthData by authToken
 break Invalid AuthToken
 db --> DataAccess: fail
 DataAccess --> Service: fail
-Service --> Server: Unauthorized
+Service --> Server: UnauthorizedException
 Server --> Client: 401\n{"message": "Error: unauthorized"}
 end
 db --> DataAccess: success
@@ -87,7 +86,7 @@ DataAccess -> db:Find AuthData by authToken
 break Invalid AuthToken
 db --> DataAccess: null
 DataAccess --> Service: fail
-Service --> Server: Unauthorized
+Service --> Server: UnauthorizedException
 Server --> Client: 401\n{"message": "Error: unauthorized"}
 end
 db --> DataAccess: AuthData
@@ -110,7 +109,7 @@ DataAccess -> db:Find AuthData by authToken
 break Invalid AuthToken
 db --> DataAccess: null
 DataAccess --> Service: fail
-Service --> Server: Unauthorized
+Service --> Server: UnauthorizedException
 Server --> Client: 401\n{"message": "Error: unauthorized"}
 end
 db --> DataAccess: AuthData
@@ -126,6 +125,37 @@ end
 
 group#yellow #lightyellow Join Game #black
 Client -> Server: [PUT] /game\nauthToken\n{playerColor, gameID}
+Server -> Handler: authToken\n{playerColor, gameID}
+Handler -> Service: JoinGame(JoinGameRequest)
+Service -> DataAccess: authorize(authToken)
+DataAccess -> db:Find AuthData by authToken
+break Invalid AuthToken
+db --> DataAccess: null
+DataAccess --> Service: fail
+Service --> Server: UnauthorizedException
+Server --> Client: 401\n{"message": "Error: unauthorized"}
+end
+db --> DataAccess: AuthData
+DataAccess --> Service: success
+Service -> DataAccess: getGame(gameID)
+DataAccess -> db: Find Game by gameID
+break invalid gameID
+db --> DataAccess: null
+DataAccess --> Service: null
+Service --> Server: GameDoesNotExistException
+Server --> Client: 403\n{"message": "Error: game does not exist"}
+end
+db --> DataAccess: GameData
+DataAccess --> Service: GameData
+break game/color already taken
+Service --> Server: GameTakenException
+Server --> Client: 403/n{"message": "Error: already taken"}
+end
+Service -> DataAccess: updateGame(gameID, username)
+DataAccess -> db: Update Game by gameID\nwith username
+Service --> Handler: success
+Handler --> Server: {}
+Server --> Client: 200\n{}
 end
 
 group#gray #lightgray Clear application 
