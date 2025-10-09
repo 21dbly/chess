@@ -1,5 +1,5 @@
 [![Sequence Diagram](10k-architecture.png)](
-https://sequencediagram.org/index.html#initialData=IYYwLg9gTgBAwgGwJYFMB2YBQAHYUxIhK4YwDKKUAbpTngUSWDABLBoAmCtu+hx7ZhWqEUdPo0EwAIsDDAAgiBAoAzqswc5wAEbBVKGBx2ZM6MFACeq3ETQBzGAAYAdAE5M9qBACu2AMQALADMABwATG4gMP7I9gAWYDoIPoYASij2SKoWckgQaJiIqKQAtAB85JQ0UABcMADaAAoA8mQAKgC6MAD0PgZQADpoAN4ARP2UaMAAtihjtWMwYwA0y7jqAO7QHAtLq8soM8BICHvLAL6YwjUwFazsXJT145NQ03PnB2MbqttQu0WyzWYyOJzOQLGVzYnG4sHuN1E9SgmWyYEoAAoMlkcpQMgBHVI5ACU12qojulVk8iUKnU9XsKDAAFUBhi3h8UKTqYplGpVJSjDpagAxJCcGCsyg8mA6SwwDmzMQ6FHAADWkoGME2SDA8QVA05MGACFVHHlKAAHmiNDzafy7gjySp6lKoDyySIVI7KjdnjAFKaUMBze11egAKKWlTYAgFT23Ur3YrmeqBJzBYbjObqYCMhbLCNQbx1A1TJXGoMh+XyNXoKFmTiYO189Q+qpelD1NA+BAIBMU+4tumqWogVXot3sgY87nae1t+7GWoKDgcTXS7QD71D+et0fj4PohQ+PUY4Cn+Kz5t7keC5er9cnvUexE7+4wp6l7FovFqXtYJ+cLtn6pavIaSpLPU+wgheertBAdZoFByyXAmlDtimGD1OEThOFmEwQZ8MDQcCyxwfECFISh+xXOgHCmF4vgBNA7CMjEIpwBG0hwAoMAADIQFkhRYcwTrUP6zRtF0vQGOo+RoFmipzGsvz-BwdFNp43h+P4XgoOgMRxIk+mGYJ9i+FgomCqB9QNNIEb8RG7QRt0PRyaoCnDBRVHoI2DHacx-gouu-jYOKGr8WiMAAOJKho1niTUdkxc5bn2Eq3mXr5hT0YxOkBBwADsbhOCgTgxBGwRwFxABs8AToYcVzDARTIOYNnVJJrQdOlmXTNliHoFmGVzAAckqmkBUxumWCgfYQJsRlIAkYBzQtS0AFIQOKsUVv4ySgGqbUlGJvpdaWzTMjJPSjSgWXwUNimjNgCDAHNUBwBACDQGsd0AJLSFN+VBV473LatYPyogwawMA2CvYQeQFK1iXnRJl0OU5LlucY-mYEAA
+https://sequencediagram.org/index.html#initialData=IYYwLg9gTgBAwgGwJYFMB2YBQAHYUxIhK4YwDKKUAbpTngUSWDABLBoAmCtu+hx7ZhWqEUdPo0EwAIsDDAAgiBAoAzqswc5wAEbBVKGBx2ZM6MFACeq3ETQBzGAAYAdAA5M9qBACu2AMQALADMbgBMAJwgMP7I9gAWYDoIPoYASij2SKoWckgQaJiIqKQAtAB85JQ0UABcMADaAAoA8mQAKgC6MAD0PgZQADpoAN4ARP2UaMAAtihjtWMwYwA0y7jqAO7QHAtLq8soM8BICHvLAL6YwjUwFazsXJT145NQ03PnB2MbqttQu0WyzWYyOJzOQLGVzYnG4sHuN1E9SgmWyYEoAAoMlkcpQMgBHVI5ACU12qojulVk8iUKnU9XsKDAAFUBhi3h8UKTqYplGpVJSjDpagAxJCcGCsyg8mA6SwwDmzMQ6FHAADWkoGME2SDA8QVA05MGACFVHHlKAAHmiNMY7vcebT+fUpVAeZhHXz1PbKoiVC6Bu6-YZSgjqs8YApTShgOb2ur0ABRS0qbAEApk6iUH3wZDmeqBJzBYbjObqYCMhbLRNQbx1A1TJXG6Ox+XyNXoKFmTiaHQ5z101T1NA+BAID3aJ3e0O+8n+mAjseZqgUh2Tr1DkCq9Gu9mB7Tc9eDwXGWoKDgcTXS7TL1dUo-Orcx9EKHx6jHAN-xHmHmkbk-Cuel6vnqQZziG9wwk89bYmieJqKOWBQXCOY3BGryGkqSz1PsIKfnq7QQB2aDYcslzLtmM65iUYD1GEThOCWEyYZ8MA4cCyz4fEhHEaR+xXOgHCmF4vgBNA7CMjEIpwIm0hwAoMAADIQFkhTFOYgpofWzRtF0vQGOo+RoCWipzGsvz-BwAk9p43h+P4XgoOgMRxIkjnOcp9i+Fg6llLOWbadIiaKYm7SJt0PQGaoRnDFxPHoN2Qm2aJ-gope-jYOKGqKWiMAAOJKhovnMGGAX1A0eWhRF9hKrFX7xYUgnCXZAQcAA7BETgoE4MSJsEcAyQAbPA26GAVcwwEUeZ+VUZWNK0HTVbV0z1UR6AljVcwAHJKtZSUifZlgoGOECbC5SAJGAR0nWdABSEDivlTb+MkoBqlNNGaeG2lNMyek9JtKB1QRa3GaM2AIMAR1QHAEAINAayAwAktIe3NSlXhQ+dl2Y-KiAxrAwDYBDhB5AUk3FV9c0NEFIVhRFxiJZgQA
 )
 ```
 actor Client
@@ -9,7 +9,7 @@ participant Service
 participant DataAccess
 database db
 
-entryspacing 0.9
+entryspacing 0.8
 group#43829c #lightblue Registration
 Client -> Server: [POST] /user\n{"username":" ", "password":" ", "email":" "}
 Server -> Handler: {"username":" ", "password":" ", "email":" "}
@@ -17,10 +17,12 @@ Handler -> Service: register(RegisterRequest)
 Service -> DataAccess: getUser(username)
 DataAccess -> db:Find UserData by username
 break User with username already exists
+db --> DataAccess: UserData
 DataAccess --> Service: UserData
 Service --> Server: AlreadyTakenException
 Server --> Client: 403\n{"message": "Error: username already taken"}
 end
+db --> DataAccess: null
 DataAccess --> Service: null
 Service -> DataAccess:createUser(userData)
 DataAccess -> db:Add UserData
@@ -43,7 +45,7 @@ group#red #pink List Games
 Client -> Server: [GET] /game\nauthToken
 end
 
-group#d790e0 #E3CCE6 Create Game
+group#d790e0 #E3CCE6 Create Game 
 Client -> Server: [POST] /game\nauthToken\n{gameName}
 end
 
@@ -51,7 +53,7 @@ group#yellow #lightyellow Join Game #black
 Client -> Server: [PUT] /game\nauthToken\n{playerColor, gameID}
 end
 
-group#gray #lightgray Clear application
+group#gray #lightgray Clear application 
 Client -> Server: [DELETE] /db
 end
 ```
