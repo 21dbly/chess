@@ -141,3 +141,38 @@ doing verbs on resources
 
 ### Javalin
 - java web framework
+
+## Relational Databases
+columns: fields
+rows: objects
+
+relate multiple tables with minimum coupling and maximum cohesion using keys
+- primary keys (this table)
+- secondary keys / foreign keys
+- keys: unique, stable, simple
+
+RDBMS: Relational Database Management System
+SQL: Structured Query language
+MySQL: RDBMS implementation
+JDBC: Java Database JDK library
+
+### SQL
+DDL: Data Definition Language
+- CREATE
+DML: Data Manipulation Language
+DQL: Data Query Language
+- Select
+
+example:
+```
+CREATE TABLE pet (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO pet (name, type) VALUES ('Puddles', 'cat');
+```
+
+shorttext, mediumtext, longtext, blob
