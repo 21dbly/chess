@@ -6,11 +6,11 @@ import java.util.HashMap;
 
 public class MemoryUserDAO implements UserDAO{
 
-    private HashMap<String, UserData> users = new HashMap<>();
+    final private HashMap<String, UserData> users = new HashMap<>();
 
     @Override
     public void clear() throws DataAccessException {
-        users = new HashMap<>();
+        users.clear();
     }
 
     @Override
