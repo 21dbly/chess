@@ -26,6 +26,7 @@ public class Server {
                 .delete("/db", this::clear)
                 .post("/user", this::register)
                 .post("/session", this::login)
+                .delete("/session", this::logout)
                 .exception(ResponseException.class, this::exceptionHandler);
         // Register your endpoints and exception handlers here.
 
@@ -59,5 +60,9 @@ public class Server {
         LoginRequest loginRequest = new Gson().fromJson(ctx.body(), LoginRequest.class);
         AuthData authData = service.login(loginRequest);
         ctx.json(new Gson().toJson(authData));
+    }
+
+    private void logout(Context ctx) throws UnauthorizedException, DataAccessException {
+        service.logout(ctx.header("authorization"));
     }
 }
