@@ -64,8 +64,10 @@ public class ChessService {
         return authData;
     }
 
-    public void logout(String authToken) {
-        throw new RuntimeException("Not implemented");
+    public void logout(String authToken)
+            throws DataAccessException, UnauthorizedException {
+        authorize(authToken);
+        authDAO.deleteAuth(authToken);
     }
 
     public String authorize(String authToken)
