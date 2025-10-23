@@ -93,10 +93,11 @@ public class ChessPiece {
 
     @Override
     public String toString() {
-        if (pieceColor == ChessGame.TeamColor.WHITE)
+        if (pieceColor == ChessGame.TeamColor.WHITE) {
             return String.valueOf(Character.toUpperCase(type.character));
-        else
+        } else {
             return String.valueOf(Character.toLowerCase(type.character));
+        }
     }
 
     @Override

@@ -63,14 +63,15 @@ public class PieceMoveCalculator {
         Collection<ChessMove> list = new ArrayList<ChessMove>();
         ChessPosition newPosition = startPosition;
         while (distance-- > 0) {
-            if (direction.length != 2) throw new RuntimeException("direction is not an int pair");
+            if (direction.length != 2) {throw new RuntimeException("direction is not an int pair");}
 
             newPosition = newPosition.plus(direction[0], direction[1]);
             MoveStatus status = canMove(board, startPosition, newPosition);
-            if (Arrays.asList(validStatuses).contains(status))
+            if (Arrays.asList(validStatuses).contains(status)) {
                 list.add(new ChessMove(startPosition, newPosition));
+            }
 
-            if (status != passThroughStatus) break;
+            if (status != passThroughStatus) {break;}
         }
         return list;
     }
@@ -92,17 +93,19 @@ public class PieceMoveCalculator {
      * or an invalid move
      */
     protected static MoveStatus canMove(ChessBoard board, ChessPosition startPosition, ChessPosition newPosition) {
-        if (!board.inBounds(newPosition))
+        if (!board.inBounds(newPosition)) {
             return MoveStatus.CANNOT_MOVE;
-
+        }
         ChessPiece otherPiece = board.getPiece(newPosition);
-        if (otherPiece == null)
+        if (otherPiece == null) {
             return MoveStatus.CAN_MOVE;
-
+        }
         ChessPiece thisPiece = board.getPiece(startPosition);
-        if (otherPiece.getTeamColor() == thisPiece.getTeamColor())
+        if (otherPiece.getTeamColor() == thisPiece.getTeamColor()) {
             return MoveStatus.CANNOT_MOVE;
-        else
+        }
+        else {
             return MoveStatus.CAN_CAPTURE;
+        }
     }
 }

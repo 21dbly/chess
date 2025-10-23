@@ -17,8 +17,9 @@ public class ChessBoard implements Iterable<ChessPosition> {
     public ChessBoard(ChessBoard other) {
         for (ChessPosition position : this) {
             ChessPiece otherPiece = other.getPiece(position);
-            if (otherPiece != null)
+            if (otherPiece != null) {
                 addPiece(position, new ChessPiece(otherPiece));
+            }
         }
     }
 
@@ -57,17 +58,18 @@ public class ChessBoard implements Iterable<ChessPosition> {
 
         piece.setMoved();
 
-        if (promotion != null) piece.promote(promotion);
+        if (promotion != null) {piece.promote(promotion);}
 
         // move for castling
         // R...K..R
         // ..KR.RK.
         if (piece.getPieceType() == ChessPiece.PieceType.KING) {
             int horizMovement = end.getColumn() - start.getColumn();
-            if (horizMovement == 2)
-                movePiece(new ChessMove(start.plus(0,3), start.plus(0, 1)));
-            else if (horizMovement == -2)
-                movePiece(new ChessMove(start.plus(0,-4), start.plus(0, -1)));
+            if (horizMovement == 2) {
+                movePiece(new ChessMove(start.plus(0, 3), start.plus(0, 1)));
+            } else if (horizMovement == -2) {
+                movePiece(new ChessMove(start.plus(0, -4), start.plus(0, -1)));
+            }
         }
     }
 
@@ -123,11 +125,15 @@ public class ChessBoard implements Iterable<ChessPosition> {
 
     private void setBoard(String boardString) {
         var rows = boardString.split("\n");
-        if (rows.length != 8) throw new RuntimeException("boardString has wrong number of rows");
+        if (rows.length != 8) {
+            throw new RuntimeException("boardString has wrong number of rows");
+        }
         int r = 8;
         for (String row : rows) {
             var splitRow = row.toCharArray();
-            if (splitRow.length != 8) throw new RuntimeException("a boardString row has wrong number of columns");
+            if (splitRow.length != 8) {
+                throw new RuntimeException("a boardString row has wrong number of columns");
+            }
             int c = 1;
             for (Character letter : splitRow) {
                 addPieceFromChar(new ChessPosition(r, c), letter);
@@ -139,10 +145,12 @@ public class ChessBoard implements Iterable<ChessPosition> {
 
     public ChessPosition findKingPosition(ChessGame.TeamColor teamColor) {
         var positions = findPieces(ChessPiece.PieceType.KING, teamColor);
-        if (positions.isEmpty())
+        if (positions.isEmpty()) {
             throw new RuntimeException("No " + teamColor.name() + " King found");
-        if (positions.size() > 1)
+        }
+        if (positions.size() > 1) {
             throw new RuntimeException("Multiple " + teamColor.name() + " Kings found");
+        }
         return positions.iterator().next(); // get first (and only) position
     }
 
@@ -150,7 +158,7 @@ public class ChessBoard implements Iterable<ChessPosition> {
         ArrayList<ChessPosition> list = new ArrayList<>();
         for (ChessPosition position : this) {
             ChessPiece piece = getPiece(position);
-            if (piece == null) continue;
+            if (piece == null) {continue;}
             if (piece.getPieceType() == pieceType && piece.getTeamColor() == color) {
                 list.add(position);
             }
