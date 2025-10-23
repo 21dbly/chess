@@ -110,7 +110,7 @@ public class ChessServiceTests {
     void createGameValid() throws ResponseException {
         service.clear();
         AuthData authData = service.register(user1);
-        GameData game = service.createGame(game1Name);
-        assertNotNull(game);
+        int gameID = service.createGame(game1Name);
+        assert(gameID >= 0);
     }
 }

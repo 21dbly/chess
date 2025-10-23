@@ -79,7 +79,7 @@ public class ChessService {
         return authData.username();
     }
 
-    public GameData createGame(String gameName) {
-        throw new RuntimeException("Not implemented");
+    public int createGame(String gameName) throws DataAccessException {
+        return gameDAO.createGame(gameName); // returns gameID
     }
 }
