@@ -45,7 +45,12 @@ public class ChessService {
         return authData;
     }
 
-    public AuthData login(LoginRequest loginRequest) throws DataAccessException, UnauthorizedException {
+    public AuthData login(LoginRequest loginRequest)
+            throws DataAccessException, UnauthorizedException, BadRequestException {
+        if (loginRequest.username() == null || loginRequest.password() == null) {
+            throw new BadRequestException();
+        }
+
         UserData user = userDAO.getUser(loginRequest.username());
         if (user == null) {
             throw new UnauthorizedException();
