@@ -9,6 +9,6 @@ import java.util.*;
 public class BishopMoveCalculator extends PieceMoveCalculator{
     public static Collection<ChessMove> calculateMoves(ChessBoard board, ChessPosition myPosition)
     {
-        return GetMovesFromDirections(board, myPosition, new int[][] {{1, 1}, {-1, 1}, {-1, -1}, {1, -1}}, 8);
+        return getMovesFromDirections(board, myPosition, new int[][] {{1, 1}, {-1, 1}, {-1, -1}, {1, -1}}, 8);
     }
 }

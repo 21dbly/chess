@@ -10,7 +10,7 @@ public class PawnMoveCalculator extends PieceMoveCalculator{
         ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
         int forwards = color == ChessGame.TeamColor.WHITE ? 1 : -1;
 
-        var list = new ArrayList<ChessMove>(GetMovesFromDirections(board, myPosition,
+        var list = new ArrayList<ChessMove>(getMovesFromDirections(board, myPosition,
                 new int[][]{{forwards, 1}, {forwards, -1}}, 1,
                 new MoveStatus[]{MoveStatus.CAN_CAPTURE}));
 
@@ -19,7 +19,7 @@ public class PawnMoveCalculator extends PieceMoveCalculator{
                 (color == ChessGame.TeamColor.BLACK && myPosition.getRow() == 7)) {
             forwardDistance = 2;
         }
-        list.addAll(GetMovesFromDirections(board, myPosition,
+        list.addAll(getMovesFromDirections(board, myPosition,
                 new int[][] {{forwards, 0}}, forwardDistance,
                 new MoveStatus[] {MoveStatus.CAN_MOVE}));
 

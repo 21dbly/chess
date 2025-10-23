@@ -8,7 +8,7 @@ import java.util.Collection;
 public class KingMoveCalculator extends PieceMoveCalculator{
     public static Collection<ChessMove> calculateMoves(ChessBoard board, ChessPosition myPosition)
     {
-        return GetMovesFromDirections(board, myPosition,
+        return getMovesFromDirections(board, myPosition,
                 new int[][] {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}}, 1);
     }
 

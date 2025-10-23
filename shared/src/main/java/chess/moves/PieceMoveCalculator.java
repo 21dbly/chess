@@ -19,9 +19,9 @@ public class PieceMoveCalculator {
      * @param distance an int representing how far to keep checking (usually 1 or 8)
      * @return Collection of valid moves
      */
-    protected static Collection<ChessMove> GetMovesFromDirections(ChessBoard board, ChessPosition startPosition,
+    protected static Collection<ChessMove> getMovesFromDirections(ChessBoard board, ChessPosition startPosition,
                                                                   int[][] directions, int distance) {
-        return GetMovesFromDirections(board, startPosition, directions, distance,
+        return getMovesFromDirections(board, startPosition, directions, distance,
                 new MoveStatus[] {MoveStatus.CAN_MOVE, MoveStatus.CAN_CAPTURE});
     }
 
@@ -36,11 +36,11 @@ public class PieceMoveCalculator {
      *                      cases for a valid move
      * @return Collection of valid moves
      */
-    protected static Collection<ChessMove> GetMovesFromDirections(ChessBoard board, ChessPosition startPosition, int[][] directions,
+    protected static Collection<ChessMove> getMovesFromDirections(ChessBoard board, ChessPosition startPosition, int[][] directions,
                                                                   int distance, MoveStatus[] validStatuses) {
         Collection<ChessMove> list = new ArrayList<ChessMove>();
         for (int[] direction : directions) {
-            list.addAll(GetMovesFromSingleDirection(board, startPosition, direction, distance, validStatuses));
+            list.addAll(getMovesFromSingleDirection(board, startPosition, direction, distance, validStatuses));
         }
         return list;
     }
@@ -56,8 +56,8 @@ public class PieceMoveCalculator {
      *                      cases for a valid move
      * @return Collection of valid moves
      */
-    protected static Collection<ChessMove> GetMovesFromSingleDirection(ChessBoard board, ChessPosition startPosition, int[] direction,
-                                                                  int distance, MoveStatus[] validStatuses) {
+    protected static Collection<ChessMove> getMovesFromSingleDirection(ChessBoard board, ChessPosition startPosition, int[] direction,
+                                                                       int distance, MoveStatus[] validStatuses) {
         MoveStatus passThroughStatus = MoveStatus.CAN_MOVE;
 
         Collection<ChessMove> list = new ArrayList<ChessMove>();

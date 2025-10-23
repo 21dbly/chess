@@ -11,7 +11,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ChessServiceTests {
-    static final ChessService service = new ChessService(
+    final ChessService service = new ChessService(
             new MemoryUserDAO(), new MemoryAuthDAO(), new MemoryGameDAO()
     );
 
