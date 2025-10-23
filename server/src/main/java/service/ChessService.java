@@ -3,6 +3,7 @@ package service;
 import dataaccess.*;
 import model.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class ChessService {
@@ -38,8 +39,17 @@ public class ChessService {
         return authData;
     }
 
-    public AuthData login(LoginRequest loginRequest) {
-        throw new RuntimeException("Not implemented");
+    public AuthData login(LoginRequest loginRequest) throws DataAccessException, UnauthorizedException {
+        UserData user = userDAO.getUser(loginRequest.username());
+        if (user == null) {
+            throw new UnauthorizedException("Incorrect username or password");
+        }
+        if (!Objects.equals(user.password(), loginRequest.password())) {
+            throw new UnauthorizedException("Incorrect username or password");
+        }
+        AuthData authData = new AuthData(generateToken(), user.username());
+        authDAO.createAuth(authData);
+        return authData;
     }
 
     public void logout(String authToken) {

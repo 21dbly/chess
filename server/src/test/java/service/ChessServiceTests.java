@@ -19,7 +19,7 @@ public class ChessServiceTests {
     final LoginRequest user2Login = new LoginRequest("userTwo", "pass222");
 
     @Test
-    void registerValid() throws RegistrationException, DataAccessException {
+    void registerValid() throws RegistrationException, DataAccessException, UnauthorizedException {
         // requires login to work
         service.clear();
         service.register(user1);
@@ -36,7 +36,7 @@ public class ChessServiceTests {
     }
 
     @Test
-    void loginValid() throws RegistrationException, DataAccessException {
+    void loginValid() throws RegistrationException, DataAccessException, UnauthorizedException {
         service.clear();
         service.register(user1);
         AuthData authData = service.login(user1Login);
@@ -48,7 +48,7 @@ public class ChessServiceTests {
     void loginWrongPassword() throws RegistrationException, DataAccessException {
         service.clear();
         service.register(user1);
-        assertThrows(Exception.class, () ->
+        assertThrows(UnauthorizedException.class, () ->
                 service.login(wrongPasswordLogin));
     }
 
@@ -56,7 +56,7 @@ public class ChessServiceTests {
     void loginWrongUsername() throws RegistrationException, DataAccessException {
         service.clear();
         service.register(user1);
-        assertThrows(Exception.class, () ->
+        assertThrows(UnauthorizedException.class, () ->
                 service.login(user2Login));
     }
 }
