@@ -1,6 +1,7 @@
 package service;
 
 import dataaccess.*;
+import exceptions.ResponseException;
 import model.*;
 
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ public class ChessServiceTests {
     final LoginRequest user2Login = new LoginRequest("userTwo", "pass222");
 
     @Test
-    void registerValid() throws RegistrationException, DataAccessException, UnauthorizedException {
+    void registerValid() throws ResponseException {
         // requires login to work
         service.clear();
         service.register(user1);
@@ -28,7 +29,7 @@ public class ChessServiceTests {
     }
 
     @Test
-    void registerExisting() throws RegistrationException, DataAccessException {
+    void registerExisting() throws ResponseException {
         service.clear();
         service.register(user1);
         assertThrows(RegistrationException.class, () ->
@@ -36,7 +37,7 @@ public class ChessServiceTests {
     }
 
     @Test
-    void loginValid() throws RegistrationException, DataAccessException, UnauthorizedException {
+    void loginValid() throws ResponseException {
         service.clear();
         service.register(user1);
         AuthData authData = service.login(user1Login);
@@ -45,7 +46,7 @@ public class ChessServiceTests {
     }
 
     @Test
-    void loginWrongPassword() throws RegistrationException, DataAccessException {
+    void loginWrongPassword() throws ResponseException {
         service.clear();
         service.register(user1);
         assertThrows(UnauthorizedException.class, () ->
@@ -53,7 +54,7 @@ public class ChessServiceTests {
     }
 
     @Test
-    void loginWrongUsername() throws RegistrationException, DataAccessException {
+    void loginWrongUsername() throws ResponseException {
         service.clear();
         service.register(user1);
         assertThrows(UnauthorizedException.class, () ->

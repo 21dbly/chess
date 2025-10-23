@@ -9,6 +9,7 @@ import exceptions.ResponseException;
 import io.javalin.*;
 import io.javalin.http.Context;
 import model.*;
+import service.BadRequestException;
 import service.ChessService;
 import service.RegistrationException;
 
@@ -46,7 +47,7 @@ public class Server {
         service.clear();
     }
 
-    private void register(Context ctx) throws DataAccessException, RegistrationException {
+    private void register(Context ctx) throws DataAccessException, RegistrationException, BadRequestException {
         UserData userData = new Gson().fromJson(ctx.body(), UserData.class);
         AuthData authData = service.register(userData);
         ctx.json(new Gson().toJson(authData));

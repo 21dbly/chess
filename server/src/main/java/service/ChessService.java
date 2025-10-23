@@ -29,7 +29,12 @@ public class ChessService {
         return UUID.randomUUID().toString();
     }
 
-    public AuthData register(UserData registerRequest) throws DataAccessException, RegistrationException{
+    public AuthData register(UserData registerRequest)
+            throws DataAccessException, RegistrationException, BadRequestException {
+        if (!registerRequest.isComplete()) {
+            throw new BadRequestException();
+        }
+
         var existingUser = userDAO.getUser(registerRequest.username());
         if (existingUser != null) {
             throw new RegistrationException();
