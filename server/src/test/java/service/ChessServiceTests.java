@@ -144,4 +144,45 @@ public class ChessServiceTests {
             }
         }
     }
+
+    @Test
+    void joinGameValid() throws ResponseException{
+        // requires createGame and listGames to work
+        service.clear();
+        AuthData authData = service.register(user1);
+        int game1ID = service.createGame(game1Name);
+        service.joinGame(new JoinGameRequest("WHITE", game1ID), user1.username());
+        var games = service.listGames();
+        GameData game = games.iterator().next();
+        assertSame(game.whiteUsername(), user1.username());
+        assertNull(game.blackUsername());
+        service.joinGame(new JoinGameRequest("BLACK", game1ID), user1.username());
+        games = service.listGames();
+        game = games.iterator().next();
+        assertSame(game.blackUsername(), user1.username());
+    }
+
+    @Test
+    void joinGameNonexistent() throws ResponseException{
+        // requires createGame and listGames to work
+        service.clear();
+        AuthData authData = service.register(user1);
+        int game1ID = service.createGame(game1Name);
+        assertThrows(BadRequestException.class, () ->
+                service.joinGame(new JoinGameRequest("WHITE", 12345), user1.username()));
+    }
+
+    @Test
+    void joinGameTaken() throws ResponseException{
+        // requires createGame and listGames to work
+        service.clear();
+        AuthData authData = service.register(user1);
+        int game1ID = service.createGame(game1Name);
+        service.joinGame(new JoinGameRequest("WHITE", game1ID), user1.username());
+        assertThrows(JoinException.class, () ->
+                service.joinGame(new JoinGameRequest("WHITE", game1ID), user1.username()));
+        service.joinGame(new JoinGameRequest("BLACK", game1ID), user1.username());
+        assertThrows(JoinException.class, () ->
+                service.joinGame(new JoinGameRequest("BLACK", game1ID), user1.username()));
+    }
 }

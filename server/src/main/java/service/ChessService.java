@@ -90,4 +90,28 @@ public class ChessService {
     public Collection<GameData> listGames() throws DataAccessException {
         return gameDAO.listGames();
     }
+
+    public void joinGame(JoinGameRequest request, String userName)
+            throws BadRequestException, DataAccessException, JoinException {
+        if (!request.isValid()) {
+            throw new BadRequestException();
+        }
+        GameData game = gameDAO.getGame(request.gameID());
+        if (game == null) {
+            throw new BadRequestException();
+        }
+        GameData updatedGame;
+        if (Objects.equals(request.playerColor(), "WHITE")) {
+            if (game.whiteUsername() != null) {
+                throw new JoinException();
+            }
+            updatedGame = new GameData(game.gameID(), userName, game.blackUsername(), game.gameName(), game.game());
+        } else {
+            if (game.blackUsername() != null) {
+                throw new JoinException();
+            }
+            updatedGame = new GameData(game.gameID(), game.whiteUsername(), userName, game.gameName(), game.game());
+        }
+        gameDAO.updateGame(updatedGame);
+    }
 }
