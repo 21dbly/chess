@@ -3,6 +3,8 @@ package service;
 import dataaccess.*;
 import model.*;
 
+import java.util.UUID;
+
 public class ChessService {
 
     private final UserDAO userDAO;
@@ -21,12 +23,18 @@ public class ChessService {
         gameDAO.clear();
     }
 
+    private static String generateToken() {
+        return UUID.randomUUID().toString();
+    }
+
     public AuthData register(UserData registerRequest) throws DataAccessException, RegistrationException{
         var existingUser = userDAO.getUser(registerRequest.username());
         if (existingUser != null) {
             throw new RegistrationException("User already exists");
         }
-        throw new RuntimeException("Not fully implemented");
+        AuthData authData = new AuthData(generateToken(), registerRequest.username());
+        authDAO.createAuth(authData);
+        return authData;
     }
 
     public AuthData login(LoginRequest loginRequest) {
