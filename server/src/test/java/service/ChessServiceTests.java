@@ -185,4 +185,17 @@ public class ChessServiceTests {
         assertThrows(JoinException.class, () ->
                 service.joinGame(new JoinGameRequest("BLACK", game1ID), user1.username()));
     }
+
+    @Test
+    void clearValid() throws ResponseException {
+        service.clear();
+        AuthData authData = service.register(user1);
+        int game1ID = service.createGame(game1Name);
+        service.clear();
+        assertThrows(UnauthorizedException.class, () ->
+                service.authorize(authData.authToken()));
+        assertThrows(UnauthorizedException.class, () ->
+                service.login(user1Login));
+        assert(service.listGames().isEmpty());
+    }
 }
