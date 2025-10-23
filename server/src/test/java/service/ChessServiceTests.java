@@ -65,8 +65,8 @@ public class ChessServiceTests {
     void authorizeValid() throws ResponseException {
         service.clear();
         AuthData authData = service.register(user1);
-        UserData user = service.authorize(authData.authToken());
-        assertSame(user.username(), authData.username());
+        String username = service.authorize(authData.authToken());
+        assertSame(username, authData.username());
     }
 
     @Test
@@ -74,10 +74,10 @@ public class ChessServiceTests {
         service.clear();
         AuthData authData1 = service.register(user1);
         AuthData authData2 = service.register(user2);
-        UserData returnedUser1 = service.authorize(authData1.authToken());
-        UserData returnedUser2 = service.authorize(authData2.authToken());
-        assertSame(returnedUser1.username(), authData1.username());
-        assertSame(returnedUser2.username(), authData2.username());
+        String username1 = service.authorize(authData1.authToken());
+        String username2 = service.authorize(authData2.authToken());
+        assertSame(username1, authData1.username());
+        assertSame(username2, authData2.username());
     }
 
     @Test

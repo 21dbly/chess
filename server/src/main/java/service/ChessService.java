@@ -68,7 +68,12 @@ public class ChessService {
         throw new RuntimeException("Not implemented");
     }
 
-    public UserData authorize(String authToken) {
-        throw new RuntimeException("Not implemented");
+    public String authorize(String authToken)
+            throws DataAccessException, UnauthorizedException {
+        AuthData authData = authDAO.getAuth(authToken);
+        if (authData == null) {
+            throw new UnauthorizedException();
+        }
+        return authData.username();
     }
 }
