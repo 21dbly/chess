@@ -9,10 +9,7 @@ import exceptions.ResponseException;
 import io.javalin.*;
 import io.javalin.http.Context;
 import model.*;
-import service.BadRequestException;
-import service.ChessService;
-import service.RegistrationException;
-import service.UnauthorizedException;
+import service.*;
 
 public class Server {
 
@@ -29,6 +26,7 @@ public class Server {
                 .delete("/session", this::logout)
                 .post("/game", this::createGame)
                 .get("/game", this::listGames)
+                .put("/game", this::joinGame)
                 .exception(ResponseException.class, this::exceptionHandler);
         // Register your endpoints and exception handlers here.
 
@@ -79,5 +77,11 @@ public class Server {
         service.authorize(ctx.header("authorization"));
         var games = service.listGames();
         ctx.json(new Gson().toJson(new ListGamesResponse(games)));
+    }
+
+    private void joinGame(Context ctx) throws UnauthorizedException, DataAccessException, JoinException, BadRequestException {
+        String username = service.authorize(ctx.header("authorization"));
+        JoinGameRequest req = new Gson().fromJson(ctx.body(), JoinGameRequest.class);
+        service.joinGame(req, username);
     }
 }
