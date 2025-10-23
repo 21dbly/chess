@@ -79,7 +79,11 @@ public class ChessService {
         return authData.username();
     }
 
-    public int createGame(String gameName) throws DataAccessException {
+    public int createGame(String gameName)
+            throws DataAccessException, BadRequestException {
+        if (gameName == null) {
+            throw new BadRequestException();
+        }
         return gameDAO.createGame(gameName); // returns gameID
     }
 }
