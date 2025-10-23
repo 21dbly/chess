@@ -4,6 +4,7 @@ import model.GameData;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class MemoryGameDAO implements GameDAO{
     final private HashMap<Integer, GameData> games = new HashMap<>();
@@ -32,7 +33,12 @@ public class MemoryGameDAO implements GameDAO{
 
     @Override
     public Collection<GameData> listGames() throws DataAccessException {
-        return games.values();
+        var actualGames = games.values();
+        // don't return actual game serialization
+        var gameInfos = actualGames.stream().map(game ->
+                new GameData(game.gameID(), game.whiteUsername(), game.blackUsername(), game.gameName(), null))
+                .collect(Collectors.toList());
+        return gameInfos;
     }
 
     @Override

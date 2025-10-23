@@ -28,6 +28,7 @@ public class Server {
                 .post("/session", this::login)
                 .delete("/session", this::logout)
                 .post("/game", this::createGame)
+                .get("/game", this::listGames)
                 .exception(ResponseException.class, this::exceptionHandler);
         // Register your endpoints and exception handlers here.
 
@@ -72,5 +73,11 @@ public class Server {
         CreateGameRequest req = new Gson().fromJson(ctx.body(), CreateGameRequest.class);
         int gameID = service.createGame(req.gameName());
         ctx.json(new Gson().toJson(new CreateGameResponse(gameID)));
+    }
+
+    private void listGames(Context ctx) throws UnauthorizedException, DataAccessException {
+        service.authorize(ctx.header("authorization"));
+        var games = service.listGames();
+        ctx.json(new Gson().toJson(new ListGamesResponse(games)));
     }
 }
