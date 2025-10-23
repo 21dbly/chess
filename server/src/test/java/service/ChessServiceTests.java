@@ -60,4 +60,31 @@ public class ChessServiceTests {
         assertThrows(UnauthorizedException.class, () ->
                 service.login(user2Login));
     }
+
+    @Test
+    void authorizeValid() throws ResponseException {
+        service.clear();
+        AuthData authData = service.register(user1);
+        UserData user = service.authorize(authData.authToken());
+        assertSame(user.username(), authData.username());
+    }
+
+    @Test
+    void authorizeMultiple() throws ResponseException {
+        service.clear();
+        AuthData authData1 = service.register(user1);
+        AuthData authData2 = service.register(user2);
+        UserData returnedUser1 = service.authorize(authData1.authToken());
+        UserData returnedUser2 = service.authorize(authData2.authToken());
+        assertSame(returnedUser1.username(), authData1.username());
+        assertSame(returnedUser2.username(), authData2.username());
+    }
+
+    @Test
+    void authorizeInvalid() throws ResponseException {
+        service.clear();
+        service.register(user1);
+        assertThrows(UnauthorizedException.class, () ->
+                service.authorize("123456789"));
+    }
 }

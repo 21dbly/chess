@@ -4,6 +4,7 @@ import dataaccess.*;
 import exceptions.ResponseException;
 import model.*;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -64,6 +65,10 @@ public class ChessService {
     }
 
     public void logout(String authToken) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    public UserData authorize(String authToken) {
         throw new RuntimeException("Not implemented");
     }
 }
