@@ -5,6 +5,9 @@ import exceptions.ResponseException;
 import model.*;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ChessServiceTests {
@@ -19,6 +22,7 @@ public class ChessServiceTests {
     final UserData user2 = new UserData("userTwo", "pass222", "two@mail.com");
     final LoginRequest user2Login = new LoginRequest("userTwo", "pass222");
     final String game1Name = "game1!";
+    final String game2Name = "game2?";
 
     @Test
     void registerValid() throws ResponseException {
@@ -112,5 +116,32 @@ public class ChessServiceTests {
         AuthData authData = service.register(user1);
         int gameID = service.createGame(game1Name);
         assert(gameID >= 0);
+    }
+
+    @Test
+    void listGamesEmpty() throws ResponseException {
+        service.clear();
+        AuthData authData = service.register(user1);
+        var games = service.listGames();
+        assert(games.isEmpty());
+    }
+
+    @Test
+    void listGamesNotEmpty() throws ResponseException {
+        // requires createGame to work
+        service.clear();
+        AuthData authData = service.register(user1);
+        int game1ID = service.createGame(game1Name);
+        int game2ID = service.createGame(game2Name);
+        var games = service.listGames();
+        assert(games.size() == 2);
+        for (GameData game : games) {
+            if (game.gameID() == game1ID) {
+                assertSame(game.gameName(), game1Name);
+            } else {
+                assertSame(game.gameID(), game2ID);
+                assertSame(game.gameName(), game2Name);
+            }
+        }
     }
 }

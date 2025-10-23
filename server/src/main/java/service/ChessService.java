@@ -86,4 +86,8 @@ public class ChessService {
         }
         return gameDAO.createGame(gameName); // returns gameID
     }
+
+    public Collection<GameData> listGames() {
+        throw new RuntimeException("Not implemented");
+    }
 }
