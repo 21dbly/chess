@@ -5,6 +5,7 @@ import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
+import exceptions.ResponseException;
 import io.javalin.*;
 import io.javalin.http.Context;
 import model.*;
@@ -21,7 +22,8 @@ public class Server {
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
                 .delete("/db", this::clear)
-                .post("/user", this::register);
+                .post("/user", this::register)
+                .exception(ResponseException.class, this::exceptionHandler);
         // Register your endpoints and exception handlers here.
 
     }
@@ -33,6 +35,11 @@ public class Server {
 
     public void stop() {
         javalin.stop();
+    }
+
+    private void exceptionHandler(ResponseException ex, Context ctx) {
+        ctx.status(ex.code());
+        ctx.json(ex.toJson());
     }
 
     private void clear(Context ctx) throws DataAccessException {

@@ -1,13 +1,14 @@
 package dataaccess;
 
+import exceptions.ResponseException;
+
 /**
  * Indicates there was an error connecting to the database
  */
-public class DataAccessException extends Exception{
+public class DataAccessException extends ResponseException {
+    // is it a bad idea to modify this?
     public DataAccessException(String message) {
-        super(message);
+        super(500, message);
     }
-    public DataAccessException(String message, Throwable ex) {
-        super(message, ex);
-    }
+    public DataAccessException(int code, String message) {super(code, message);}
 }

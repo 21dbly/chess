@@ -1,6 +1,7 @@
 package service;
 
 import dataaccess.*;
+import exceptions.ResponseException;
 import model.*;
 
 import java.util.Objects;
@@ -31,7 +32,7 @@ public class ChessService {
     public AuthData register(UserData registerRequest) throws DataAccessException, RegistrationException{
         var existingUser = userDAO.getUser(registerRequest.username());
         if (existingUser != null) {
-            throw new RegistrationException("User already exists");
+            throw new RegistrationException();
         }
         userDAO.createUser(registerRequest);
         AuthData authData = new AuthData(generateToken(), registerRequest.username());
@@ -42,10 +43,10 @@ public class ChessService {
     public AuthData login(LoginRequest loginRequest) throws DataAccessException, UnauthorizedException {
         UserData user = userDAO.getUser(loginRequest.username());
         if (user == null) {
-            throw new UnauthorizedException("Incorrect username or password");
+            throw new UnauthorizedException();
         }
         if (!Objects.equals(user.password(), loginRequest.password())) {
-            throw new UnauthorizedException("Incorrect username or password");
+            throw new UnauthorizedException();
         }
         AuthData authData = new AuthData(generateToken(), user.username());
         authDAO.createAuth(authData);
