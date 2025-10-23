@@ -87,4 +87,21 @@ public class ChessServiceTests {
         assertThrows(UnauthorizedException.class, () ->
                 service.authorize("123456789"));
     }
+
+    @Test
+    void logoutValid() throws ResponseException {
+        service.clear();
+        AuthData authData = service.register(user1);
+        service.logout(authData.authToken());
+        assertThrows(UnauthorizedException.class, () ->
+                service.authorize(authData.authToken()));
+    }
+
+    @Test
+    void logoutInvalid() throws ResponseException {
+        service.clear();
+        AuthData authData = service.register(user1);
+        assertThrows(UnauthorizedException.class, () ->
+                service.logout("123456789"));
+    }
 }
