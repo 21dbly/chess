@@ -20,6 +20,7 @@ public class ChessServiceTests {
 
     @Test
     void registerValid() throws RegistrationException, DataAccessException {
+        // requires login to work
         service.clear();
         service.register(user1);
         AuthData authData = service.login(user1Login);

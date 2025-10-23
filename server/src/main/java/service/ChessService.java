@@ -32,6 +32,7 @@ public class ChessService {
         if (existingUser != null) {
             throw new RegistrationException("User already exists");
         }
+        userDAO.createUser(registerRequest);
         AuthData authData = new AuthData(generateToken(), registerRequest.username());
         authDAO.createAuth(authData);
         return authData;
