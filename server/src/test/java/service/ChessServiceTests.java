@@ -18,6 +18,7 @@ public class ChessServiceTests {
     final UserData testSameUsername = new UserData("userOne", "differentPass", "different@mail.com");
     final UserData user2 = new UserData("userTwo", "pass222", "two@mail.com");
     final LoginRequest user2Login = new LoginRequest("userTwo", "pass222");
+    final String game1Name = "game1!";
 
     @Test
     void registerValid() throws ResponseException {
@@ -103,5 +104,13 @@ public class ChessServiceTests {
         AuthData authData = service.register(user1);
         assertThrows(UnauthorizedException.class, () ->
                 service.logout("123456789"));
+    }
+
+    @Test
+    void createGameValid() throws ResponseException {
+        service.clear();
+        AuthData authData = service.register(user1);
+        GameData game = service.createGame(game1Name);
+        assertNotNull(game);
     }
 }

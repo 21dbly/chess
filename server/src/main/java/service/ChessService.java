@@ -78,4 +78,8 @@ public class ChessService {
         }
         return authData.username();
     }
+
+    public GameData createGame(String gameName) {
+        throw new RuntimeException("Not implemented");
+    }
 }
