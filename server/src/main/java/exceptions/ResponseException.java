@@ -12,6 +12,10 @@ public class ResponseException extends Exception {
         super(message);
         this.code = code;
     }
+    public ResponseException(int code, String message, Throwable ex) {
+        super(message, ex);
+        this.code = code;
+    }
 
     public String toJson() {
         return new Gson().toJson(Map.of("message", getMessage(), "status", code));

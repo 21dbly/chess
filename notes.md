@@ -176,3 +176,13 @@ INSERT INTO pet (name, type) VALUES ('Puddles', 'cat');
 ```
 
 shorttext, mediumtext, longtext, blob
+
+## JDBC
+Java Database Connector
+
+```
+try (var preparedStatement = conn.preparedStatement("SELECT * from table WHERE id = ?")) {
+    try (var resultSet = preparedStatement.execute()) {
+    }
+}
+```

@@ -10,5 +10,7 @@ public class DataAccessException extends ResponseException {
     public DataAccessException(String message) {
         super(500, message);
     }
-    public DataAccessException(int code, String message) {super(code, message);}
+    public DataAccessException(String message, Throwable ex) {
+        super(500, message, ex);
+    }
 }
