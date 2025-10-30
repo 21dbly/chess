@@ -186,3 +186,10 @@ try (var preparedStatement = conn.preparedStatement("SELECT * from table WHERE i
     }
 }
 ```
+
+## CLI
+(Command Line Interface)
+- Repl: Read, Evaluate, Print, Loop
+
+- Colors:
+  `echo -e "\u001b[31;44;1m red on blue"`
