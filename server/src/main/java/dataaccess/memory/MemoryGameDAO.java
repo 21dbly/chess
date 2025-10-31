@@ -1,12 +1,14 @@
-package dataaccess;
+package dataaccess.memory;
 
+import dataaccess.DataAccessException;
+import dataaccess.GameDAO;
 import model.GameData;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public class MemoryGameDAO implements GameDAO{
+public class MemoryGameDAO implements GameDAO {
     final private HashMap<Integer, GameData> games = new HashMap<>();
     private int nextID = 1;
 

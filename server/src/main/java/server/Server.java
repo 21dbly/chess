@@ -2,9 +2,9 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.memory.MemoryAuthDAO;
+import dataaccess.memory.MemoryGameDAO;
+import dataaccess.memory.MemoryUserDAO;
 import exceptions.ResponseException;
 import io.javalin.*;
 import io.javalin.http.Context;
