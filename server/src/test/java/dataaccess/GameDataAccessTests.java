@@ -47,5 +47,25 @@ class GameDataAccessTests {
         int secondID = gameDAO.createGame(game1Name);
         assertNotEquals(firstID, secondID);
     }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
+    void getGameValid(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+        GameDAO gameDAO = getGameDAO(gameDAOclass);
+        int gameID = gameDAO.createGame(game1Name);
+        GameData returnedGame = gameDAO.getGame(gameID);
+        assertEquals(gameID, returnedGame.gameID());
+        assertEquals(game1Name, returnedGame.gameName());
+        assertNotNull(returnedGame.game());
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
+    void getGameNone(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+        GameDAO gameDAO = getGameDAO(gameDAOclass);
+        int gameID = gameDAO.createGame(game1Name);
+        GameData returnedGame = gameDAO.getGame(gameID + 1);
+        assertNull(returnedGame);
+    }
     
 }

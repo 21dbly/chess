@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessGame;
 import model.GameData;
 
 import java.util.Collection;
@@ -22,7 +23,7 @@ public class MemoryGameDAO implements GameDAO {
     @Override
     public int createGame(String gameName) throws DataAccessException {
         int gameID = getNextID();
-        games.put(gameID, new GameData(gameID, null, null, gameName, null));
+        games.put(gameID, new GameData(gameID, null, null, gameName, new ChessGame()));
         return gameID;
     }
 
