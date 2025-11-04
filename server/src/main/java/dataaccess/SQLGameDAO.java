@@ -122,6 +122,10 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public void updateGame(GameData gameData) throws DataAccessException {
-        throw new RuntimeException("not implemented");
+        if (gameData.game() == null) {
+            throw new DataAccessException("game cannot be null");
+        }
+        var statement = "UPDATE gameData SET whiteUsername=?, blackUsername=?, gameName=?, game=? WHERE gameID=?";
+        executeUpdate(statement, gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName(), gameData.game().serialize(), gameData.gameID());
     }
 }
