@@ -8,6 +8,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameDataAccessTests {
+
+    final String game1Name = "game1!";
+    final String game2Name = "game2?";
     
     private GameDAO getGameDAO(Class<? extends GameDAO> gameDAOClass) throws DataAccessException {
         GameDAO gameDAO;
@@ -22,8 +25,27 @@ class GameDataAccessTests {
 
     @ParameterizedTest
     @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
-    void test(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+    void createGameValid(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
         GameDAO gameDAO = getGameDAO(gameDAOclass);
+        assertDoesNotThrow(() ->
+                gameDAO.createGame(game1Name));
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
+    void createGameNoName(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+        GameDAO gameDAO = getGameDAO(gameDAOclass);
+        assertThrows(DataAccessException.class, () ->
+                gameDAO.createGame(null));
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
+    void createGameSameName(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+        GameDAO gameDAO = getGameDAO(gameDAOclass);
+        int firstID = gameDAO.createGame(game1Name);
+        int secondID = gameDAO.createGame(game1Name);
+        assertNotEquals(firstID, secondID);
     }
     
 }
