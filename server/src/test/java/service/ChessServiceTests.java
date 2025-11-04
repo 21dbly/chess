@@ -11,11 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ChessServiceTests {
     final ChessService service;
     {
-        try {
-            service = new ChessService(new MemoryUserDAO(), new SQLAuthDAO(), new MemoryGameDAO());
-        } catch (DataAccessException e) {
-            throw new RuntimeException(e);
-        }
+        service = new ChessService(new MemoryUserDAO(), new MemoryAuthDAO(), new MemoryGameDAO());
     }
 
     final UserData user1 = new UserData("userOne", "pass111", "one@mail.com");
