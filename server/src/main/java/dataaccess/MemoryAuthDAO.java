@@ -22,6 +22,9 @@ public class MemoryAuthDAO implements AuthDAO {
 
     @Override
     public AuthData getAuth(String authToken) throws DataAccessException {
+        if (authToken == null) {
+            throw new DataAccessException("must provide authToken");
+        }
         return auths.get(authToken);
     }
 
