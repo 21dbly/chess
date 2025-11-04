@@ -34,16 +34,10 @@ class AuthDataAccessTests {
 
     @ParameterizedTest
     @ValueSource(classes = {SQLAuthDAO.class, MemoryAuthDAO.class})
-    void createAuthNoToken(Class<? extends AuthDAO> authDAOclass) throws ResponseException {
+    void createAuthNullValues(Class<? extends AuthDAO> authDAOclass) throws ResponseException {
         AuthDAO authDAO = getAuthDAO(authDAOclass);
         assertThrows(DataAccessException.class, () ->
                 authDAO.createAuth(authNoToken));
-    }
-
-    @ParameterizedTest
-    @ValueSource(classes = {SQLAuthDAO.class, MemoryAuthDAO.class})
-    void createAuthNoUsername(Class<? extends AuthDAO> authDAOclass) throws ResponseException {
-        AuthDAO authDAO = getAuthDAO(authDAOclass);
         assertThrows(DataAccessException.class, () ->
                 authDAO.createAuth(authNoUser));
     }

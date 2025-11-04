@@ -27,7 +27,8 @@ public class SQLDataAccess {
                         case String p -> ps.setString(i + 1, p);
                         case Integer p -> ps.setInt(i + 1, p);
                         case null -> ps.setNull(i + 1, NULL);
-                        default -> {}
+                        default -> throw new RuntimeException("I had this default case just as {} but " +
+                                "code quality robot said that's too nested so here we are with a juicy error instead");
                     }
                 }
                 ps.executeUpdate();
