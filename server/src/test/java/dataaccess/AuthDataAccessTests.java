@@ -7,19 +7,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DataAccessTests {
+class AuthDataAccessTests {
 
     final AuthData user1Auth = new AuthData("12345", "userOne");
     final AuthData authNoUser = new AuthData("12345", null);
     final AuthData authNoToken = new AuthData(null, "userOne");
     final AuthData user2Auth = new AuthData("12346", "userTwo");
-    final LoginRequest user1Login = new LoginRequest("userOne", "pass111");
-    final LoginRequest wrongPasswordLogin = new LoginRequest("userOne", "wrongPass");
-    final UserData testSameUsername = new UserData("userOne", "differentPass", "different@mail.com");
-    final UserData user2 = new UserData("userTwo", "pass222", "two@mail.com");
-    final LoginRequest user2Login = new LoginRequest("userTwo", "pass222");
-    final String game1Name = "game1!";
-    final String game2Name = "game2?";
 
     private AuthDAO getAuthDAO(Class<? extends AuthDAO> authDAOClass) throws DataAccessException {
         AuthDAO authDAO;
