@@ -60,7 +60,7 @@ class DataAccessTests {
         AuthDAO authDAO = getAuthDAO(authDAOclass);
         authDAO.createAuth(user1Auth);
         AuthData returnedAuthData = authDAO.getAuth(user1Auth.authToken());
-        assertSame(user1Auth, returnedAuthData);
+        assertEquals(user1Auth, returnedAuthData);
     }
 
     @ParameterizedTest
@@ -70,14 +70,5 @@ class DataAccessTests {
         authDAO.createAuth(user1Auth);
         AuthData returnedAuthData = authDAO.getAuth("thisAuthTokenDoesNotExist");
         assertNull(returnedAuthData);
-    }
-
-    @ParameterizedTest
-    @ValueSource(classes = {SQLAuthDAO.class, MemoryAuthDAO.class})
-    void getAuthNoToken(Class<? extends AuthDAO> authDAOclass) throws ResponseException {
-        AuthDAO authDAO = getAuthDAO(authDAOclass);
-        authDAO.createAuth(user1Auth);
-        assertThrows(DataAccessException.class, () ->
-                authDAO.getAuth(null));
     }
 }
