@@ -7,6 +7,11 @@ import java.sql.*;
 import static java.sql.Types.NULL;
 
 public class SQLAuthDAO implements AuthDAO {
+
+    public SQLAuthDAO() throws DataAccessException {
+        configureDatabase();
+    }
+
     private final String createStatement = """
             CREATE TABLE IF NOT EXISTS authData (
                 `authToken` varchar(36) NOT NULL,
@@ -16,7 +21,19 @@ public class SQLAuthDAO implements AuthDAO {
             """;
     // TODO: verify elsewhere in code that username never exceeds 256 chars
 
+    private void configureDatabase() throws DataAccessException {
+        DatabaseManager.createDatabase();
+        try (Connection conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(createStatement)) {
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+        }
+    }
+
     private void executeUpdate(String statement, Object... params) throws DataAccessException {
+        // seems bad to be making a connection for every call but that's what the petshop example does
         try (Connection conn = DatabaseManager.getConnection()) {
             try (PreparedStatement ps = conn.prepareStatement(statement)) {
                 for (int i = 0; i < params.length; i++) {
@@ -34,7 +51,8 @@ public class SQLAuthDAO implements AuthDAO {
 
     @Override
     public void clear() throws DataAccessException {
-        throw new RuntimeException("Not Implemented");
+        var statement = "TRUNCATE authData";
+        executeUpdate(statement);
     }
 
     @Override
