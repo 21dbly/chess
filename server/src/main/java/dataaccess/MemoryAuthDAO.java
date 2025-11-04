@@ -14,6 +14,9 @@ public class MemoryAuthDAO implements AuthDAO {
 
     @Override
     public void createAuth(AuthData authData) throws DataAccessException {
+        if (authData.authToken() == null || authData.username() == null ) {
+            throw new DataAccessException("must provide both authToken and username");
+        }
         auths.put(authData.authToken(), authData);
     }
 
