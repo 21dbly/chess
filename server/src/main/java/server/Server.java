@@ -1,10 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
-import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.*;
 import exceptions.ResponseException;
 import io.javalin.*;
 import io.javalin.http.Context;
@@ -17,7 +14,11 @@ public class Server {
     private final ChessService service;
 
     public Server() {
-        this.service = new ChessService(new MemoryUserDAO(), new MemoryAuthDAO(), new MemoryGameDAO());
+        try {
+            this.service = new ChessService(new MemoryUserDAO(), new SQLAuthDAO(), new MemoryGameDAO());
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Error: Unable to create service while starting server: ", e);
+        }
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
                 .delete("/db", this::clear)

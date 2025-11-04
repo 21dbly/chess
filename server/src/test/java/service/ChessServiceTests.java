@@ -1,8 +1,6 @@
 package service;
 
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.*;
 import exceptions.ResponseException;
 import model.*;
 
@@ -11,9 +9,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ChessServiceTests {
-    final ChessService service = new ChessService(
-            new MemoryUserDAO(), new MemoryAuthDAO(), new MemoryGameDAO()
-    );
+    final ChessService service;
+    {
+        try {
+            service = new ChessService(new MemoryUserDAO(), new SQLAuthDAO(), new MemoryGameDAO());
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     final UserData user1 = new UserData("userOne", "pass111", "one@mail.com");
     final LoginRequest user1Login = new LoginRequest("userOne", "pass111");
@@ -30,7 +33,7 @@ public class ChessServiceTests {
         service.clear();
         service.register(user1);
         AuthData authData = service.login(user1Login);
-        assertSame(authData.username(), user1.username());
+        assertEquals(authData.username(), user1.username());
     }
 
     @Test
@@ -46,7 +49,7 @@ public class ChessServiceTests {
         service.clear();
         service.register(user1);
         AuthData authData = service.login(user1Login);
-        assertSame(authData.username(), user1.username());
+        assertEquals(authData.username(), user1.username());
         assertNotNull(authData.authToken());
     }
 
@@ -71,7 +74,7 @@ public class ChessServiceTests {
         service.clear();
         AuthData authData = service.register(user1);
         String username = service.authorize(authData.authToken());
-        assertSame(username, authData.username());
+        assertEquals(username, authData.username());
     }
 
     @Test
@@ -81,8 +84,8 @@ public class ChessServiceTests {
         AuthData authData2 = service.register(user2);
         String username1 = service.authorize(authData1.authToken());
         String username2 = service.authorize(authData2.authToken());
-        assertSame(username1, authData1.username());
-        assertSame(username2, authData2.username());
+        assertEquals(username1, authData1.username());
+        assertEquals(username2, authData2.username());
     }
 
     @Test
@@ -137,10 +140,10 @@ public class ChessServiceTests {
         assert(games.size() == 2);
         for (GameData game : games) {
             if (game.gameID() == game1ID) {
-                assertSame(game.gameName(), game1Name);
+                assertEquals(game.gameName(), game1Name);
             } else {
-                assertSame(game.gameID(), game2ID);
-                assertSame(game.gameName(), game2Name);
+                assertEquals(game.gameID(), game2ID);
+                assertEquals(game.gameName(), game2Name);
             }
         }
     }
@@ -154,12 +157,12 @@ public class ChessServiceTests {
         service.joinGame(new JoinGameRequest("WHITE", game1ID), user1.username());
         var games = service.listGames();
         GameData game = games.iterator().next();
-        assertSame(game.whiteUsername(), user1.username());
+        assertEquals(game.whiteUsername(), user1.username());
         assertNull(game.blackUsername());
         service.joinGame(new JoinGameRequest("BLACK", game1ID), user1.username());
         games = service.listGames();
         game = games.iterator().next();
-        assertSame(game.blackUsername(), user1.username());
+        assertEquals(game.blackUsername(), user1.username());
     }
 
     @Test
