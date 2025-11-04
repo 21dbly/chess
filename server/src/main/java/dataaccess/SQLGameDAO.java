@@ -1,11 +1,10 @@
 package dataaccess;
 
+import chess.ChessGame;
 import model.GameData;
+import model.UserData;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class SQLGameDAO implements GameDAO {
 
     private final String createStatement = """
             CREATE TABLE IF NOT EXISTS gameData (
-                `gameID` int NOT NULL,
+                `gameID` int NOT NULL AUTO_INCREMENT,
                 `whiteUsername` varchar(256),
                 `blackUsername` varchar(256),
                 `gameName` varchar(256) NOT NULL,
@@ -39,9 +38,9 @@ public class SQLGameDAO implements GameDAO {
         }
     }
 
-    private void executeUpdate(String statement, Object... params) throws DataAccessException {
+    private int executeUpdate(String statement, Object... params) throws DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
-            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+            try (PreparedStatement ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < params.length; i++) {
                     Object param = params[i];
                     if (param instanceof String p) ps.setString(i + 1, p);
@@ -49,6 +48,13 @@ public class SQLGameDAO implements GameDAO {
                     else if (param == null) ps.setNull(i + 1, NULL);
                 }
                 ps.executeUpdate();
+
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+
+                return 0;
             }
         } catch (SQLException e) {
             throw new DataAccessException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
@@ -63,7 +69,8 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public int createGame(String gameName) throws DataAccessException {
-        throw new RuntimeException("not implemented");
+        var statement = "INSERT INTO gameData (gameName, game) VALUES (?, ?)";
+        return executeUpdate(statement, gameName, new ChessGame().toString());
     }
 
     @Override

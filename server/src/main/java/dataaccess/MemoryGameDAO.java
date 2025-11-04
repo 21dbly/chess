@@ -22,6 +22,9 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public int createGame(String gameName) throws DataAccessException {
+        if (gameName == null || gameName.isEmpty()) {
+            throw new DataAccessException("must provide gameName");
+        }
         int gameID = getNextID();
         games.put(gameID, new GameData(gameID, null, null, gameName, new ChessGame()));
         return gameID;
