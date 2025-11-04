@@ -12,6 +12,7 @@ class DataAccessTests {
     final AuthData user1Auth = new AuthData("12345", "userOne");
     final AuthData authNoUser = new AuthData("12345", null);
     final AuthData authNoToken = new AuthData(null, "userOne");
+    final AuthData user2Auth = new AuthData("12346", "userTwo");
     final LoginRequest user1Login = new LoginRequest("userOne", "pass111");
     final LoginRequest wrongPasswordLogin = new LoginRequest("userOne", "wrongPass");
     final UserData testSameUsername = new UserData("userOne", "differentPass", "different@mail.com");
@@ -82,5 +83,14 @@ class DataAccessTests {
         assertNull(returnedAuthData);
     }
 
-
+    @ParameterizedTest
+    @ValueSource(classes = {SQLAuthDAO.class, MemoryAuthDAO.class})
+    void clearAuthValid(Class<? extends AuthDAO> authDAOclass) throws ResponseException {
+        AuthDAO authDAO = getAuthDAO(authDAOclass);
+        authDAO.createAuth(user1Auth);
+        authDAO.createAuth(user2Auth);
+        authDAO.clear();
+        assertNull(authDAO.getAuth(user1Auth.authToken()));
+        assertNull(authDAO.getAuth(user2Auth.authToken()));
+    }
 }
