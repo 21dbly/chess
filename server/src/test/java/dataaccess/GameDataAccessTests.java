@@ -5,6 +5,8 @@ import model.GameData;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Collection;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameDataAccessTests {
@@ -66,6 +68,36 @@ class GameDataAccessTests {
         int gameID = gameDAO.createGame(game1Name);
         GameData returnedGame = gameDAO.getGame(gameID + 1);
         assertNull(returnedGame);
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
+    void listGamesOne(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+        GameDAO gameDAO = getGameDAO(gameDAOclass);
+        int gameID = gameDAO.createGame(game1Name);
+        var games = gameDAO.listGames();
+        assert(games.size() == 1);
+        GameData game = games.iterator().next();
+        assertEquals(gameID, game.gameID());
+        assertEquals(game1Name, game.gameName());
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
+    void listGamesTwo(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+        GameDAO gameDAO = getGameDAO(gameDAOclass);
+        int gameID1 = gameDAO.createGame(game1Name);
+        int gameID2 = gameDAO.createGame(game2Name);
+        var games = gameDAO.listGames();
+        assert(games.size() == 2);
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
+    void listGamesNone(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+        GameDAO gameDAO = getGameDAO(gameDAOclass);
+        var games = gameDAO.listGames();
+        assert(games.isEmpty());
     }
     
 }
