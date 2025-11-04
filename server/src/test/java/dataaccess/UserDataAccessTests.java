@@ -44,4 +44,20 @@ class UserDataAccessTests {
         assertThrows(DataAccessException.class, () ->
                 userDAO.createUser(userNoEmail));
     }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLUserDAO.class, MemoryUserDAO.class})
+    void getUserValid(Class<? extends UserDAO> userDAOclass) throws ResponseException {
+        UserDAO userDAO = getUserDAO(userDAOclass);
+        userDAO.createUser(user1);
+        assertEquals(user1, userDAO.getUser(user1.username()));
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLUserDAO.class, MemoryUserDAO.class})
+    void getUserEmpty(Class<? extends UserDAO> userDAOclass) throws ResponseException {
+        UserDAO userDAO = getUserDAO(userDAOclass);
+        userDAO.createUser(user1);
+        assertNull(userDAO.getUser("NotARealUsername"));
+    }
 }
