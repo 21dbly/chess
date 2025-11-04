@@ -1,15 +1,9 @@
 package dataaccess;
 
-import dataaccess.memory.MemoryAuthDAO;
-import dataaccess.sql.SQLAuthDAO;
 import exceptions.*;
 import model.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
