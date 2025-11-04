@@ -81,6 +81,7 @@ public class SQLAuthDAO implements AuthDAO {
 
     @Override
     public void deleteAuth(String authToken) throws DataAccessException {
-        throw new RuntimeException("Not Implemented");
+        var statement = "DELETE FROM authData WHERE authToken=?";
+        executeUpdate(statement, authToken);
     }
 }

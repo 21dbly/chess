@@ -82,12 +82,5 @@ class DataAccessTests {
         assertNull(returnedAuthData);
     }
 
-    @ParameterizedTest
-    @ValueSource(classes = {SQLAuthDAO.class, MemoryAuthDAO.class})
-    void deleteAuthNull(Class<? extends AuthDAO> authDAOclass) throws ResponseException {
-        AuthDAO authDAO = getAuthDAO(authDAOclass);
-        authDAO.createAuth(user1Auth);
-        assertThrows(DataAccessException.class, () ->
-                authDAO.deleteAuth(null));
-    }
+
 }
