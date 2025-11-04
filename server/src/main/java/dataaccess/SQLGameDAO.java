@@ -11,10 +11,10 @@ import java.util.List;
 
 import static java.sql.Types.NULL;
 
-public class SQLGameDAO implements GameDAO {
+public class SQLGameDAO extends SQLDataAccess implements GameDAO {
 
     public SQLGameDAO() throws DataAccessException {
-        configureDatabase();
+        configureDatabase(createStatement);
     }
 
     private final String createStatement = """
@@ -27,40 +27,6 @@ public class SQLGameDAO implements GameDAO {
                 PRIMARY KEY (`gameID`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """;
-
-    private void configureDatabase() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (Connection conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement(createStatement)) {
-                preparedStatement.executeUpdate();
-            }
-        } catch (SQLException ex) {
-            throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
-        }
-    }
-
-    private int executeUpdate(String statement, Object... params) throws DataAccessException {
-        try (Connection conn = DatabaseManager.getConnection()) {
-            try (PreparedStatement ps = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
-                for (int i = 0; i < params.length; i++) {
-                    Object param = params[i];
-                    if (param instanceof String p) ps.setString(i + 1, p);
-                    else if (param instanceof Integer p) ps.setInt(i + 1, p);
-                    else if (param == null) ps.setNull(i + 1, NULL);
-                }
-                ps.executeUpdate();
-
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-
-                return 0;
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
-        }
-    }
 
     @Override
     public void clear() throws DataAccessException {
@@ -126,6 +92,7 @@ public class SQLGameDAO implements GameDAO {
             throw new DataAccessException("game cannot be null");
         }
         var statement = "UPDATE gameData SET whiteUsername=?, blackUsername=?, gameName=?, game=? WHERE gameID=?";
-        executeUpdate(statement, gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName(), gameData.game().serialize(), gameData.gameID());
+        executeUpdate(statement, gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName(),
+                gameData.game().serialize(), gameData.gameID());
     }
 }

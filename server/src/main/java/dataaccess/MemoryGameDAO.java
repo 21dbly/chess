@@ -37,13 +37,7 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public Collection<GameData> listGames() throws DataAccessException {
-        var actualGames = games.values();
-        // don't return actual game serialization for more efficiency
-//        var gameInfos = actualGames.stream().map(game ->
-//                new GameData(game.gameID(), game.whiteUsername(), game.blackUsername(), game.gameName(), null))
-//                .collect(Collectors.toList());
-//        return gameInfos;
-        return actualGames;
+        return games.values();
     }
 
     @Override
