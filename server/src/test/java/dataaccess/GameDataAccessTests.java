@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessGame;
 import exceptions.ResponseException;
 import model.GameData;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,7 +14,7 @@ class GameDataAccessTests {
 
     final String game1Name = "game1!";
     final String game2Name = "game2?";
-    
+
     private GameDAO getGameDAO(Class<? extends GameDAO> gameDAOClass) throws DataAccessException {
         GameDAO gameDAO;
         if (gameDAOClass.equals(SQLGameDAO.class)) {
@@ -98,6 +99,26 @@ class GameDataAccessTests {
         GameDAO gameDAO = getGameDAO(gameDAOclass);
         var games = gameDAO.listGames();
         assert(games.isEmpty());
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
+    void updateGameValid(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+        GameDAO gameDAO = getGameDAO(gameDAOclass);
+        int gameID1 = gameDAO.createGame(game1Name);
+        GameData newGameData = new GameData(gameID1, "white", "black", "newName", new ChessGame());
+        gameDAO.updateGame(newGameData);
+        assertEquals(newGameData, gameDAO.getGame(gameID1));
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
+    void updateGameNullValues(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+        GameDAO gameDAO = getGameDAO(gameDAOclass);
+        int gameID1 = gameDAO.createGame(game1Name);
+        GameData badGameData = new GameData(gameID1, "white", "black", null, null);
+        assertThrows(DataAccessException.class, () ->
+                gameDAO.updateGame(badGameData));
     }
     
 }
