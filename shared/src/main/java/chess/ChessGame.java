@@ -1,6 +1,7 @@
 package chess;
 
 import chess.moves.KingMoveCalculator;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -270,5 +271,13 @@ public class ChessGame {
     @Override
     public int hashCode() {
         return Objects.hash(turn, board);
+    }
+
+    public String serialize() {
+        return new Gson().toJson(this);
+    }
+
+    public static ChessGame deserialize(String str) {
+        return new Gson().fromJson(str, ChessGame.class);
     }
 }

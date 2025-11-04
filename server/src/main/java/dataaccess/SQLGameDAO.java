@@ -70,12 +70,30 @@ public class SQLGameDAO implements GameDAO {
     @Override
     public int createGame(String gameName) throws DataAccessException {
         var statement = "INSERT INTO gameData (gameName, game) VALUES (?, ?)";
-        return executeUpdate(statement, gameName, new ChessGame().toString());
+        return executeUpdate(statement, gameName, new ChessGame().serialize());
     }
 
     @Override
     public GameData getGame(int gameID) throws DataAccessException {
-        throw new RuntimeException("not implemented");
+        try (Connection conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT whiteUsername, blackUsername, gameName, game FROM gameData WHERE gameID=?";
+            try (PreparedStatement ps = conn.prepareStatement(statement)) {
+                ps.setInt(1, gameID);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return new GameData(
+                                gameID,
+                                rs.getString("whiteUsername"),
+                                rs.getString("blackUsername"),
+                                rs.getString("gameName"),
+                                ChessGame.deserialize(rs.getString("game")));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new DataAccessException(String.format("Unable to read data: %s", e.getMessage()));
+        }
+        return null;
     }
 
     @Override
