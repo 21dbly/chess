@@ -13,6 +13,7 @@ class UserDataAccessTests {
     final UserData userNoName = new UserData(null, "pass111", "one@mail.com");
     final UserData userNoPass = new UserData("userOne", null, "one@mail.com");
     final UserData userNoEmail = new UserData("userOne", "pass111", null);
+    final UserData user2 = new UserData("userTwo", "pass222", "two@mail.com");
 
     private UserDAO getUserDAO(Class<? extends UserDAO> userDAOClass) throws DataAccessException {
         UserDAO userDAO;
@@ -59,5 +60,16 @@ class UserDataAccessTests {
         UserDAO userDAO = getUserDAO(userDAOclass);
         userDAO.createUser(user1);
         assertNull(userDAO.getUser("NotARealUsername"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLUserDAO.class, MemoryUserDAO.class})
+    void clearUsersValid(Class<? extends UserDAO> userDAOclass) throws ResponseException {
+        UserDAO userDAO = getUserDAO(userDAOclass);
+        userDAO.createUser(user1);
+        userDAO.createUser(user2);
+        userDAO.clear();
+        assertNull(userDAO.getUser(user1.username()));
+        assertNull(userDAO.getUser(user2.username()));
     }
 }
