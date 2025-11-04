@@ -15,6 +15,9 @@ public class MemoryUserDAO implements UserDAO {
 
     @Override
     public void createUser(UserData userData) throws DataAccessException {
+        if (!userData.isComplete()) {
+            throw new DataAccessException("must provide username, password, and email");
+        }
         users.put(userData.username(), userData);
     }
 
