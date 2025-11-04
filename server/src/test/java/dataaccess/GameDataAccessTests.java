@@ -120,5 +120,14 @@ class GameDataAccessTests {
         assertThrows(DataAccessException.class, () ->
                 gameDAO.updateGame(badGameData));
     }
-    
+
+    @ParameterizedTest
+    @ValueSource(classes = {SQLGameDAO.class, MemoryGameDAO.class})
+    void clearGamesValid(Class<? extends GameDAO> gameDAOclass) throws ResponseException {
+        GameDAO gameDAO = getGameDAO(gameDAOclass);
+        int gameID1 = gameDAO.createGame(game1Name);
+        int gameID2 = gameDAO.createGame(game2Name);
+        gameDAO.clear();
+        assert(gameDAO.listGames().isEmpty());
+    }
 }
