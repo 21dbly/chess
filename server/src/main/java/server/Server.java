@@ -15,7 +15,7 @@ public class Server {
 
     public Server() {
         try {
-            this.service = new ChessService(new MemoryUserDAO(), new SQLAuthDAO(), new MemoryGameDAO());
+            this.service = new ChessService(new SQLUserDAO(), new SQLAuthDAO(), new MemoryGameDAO());
         } catch (DataAccessException e) {
             throw new RuntimeException("Error: Unable to create service while starting server: ", e);
         }

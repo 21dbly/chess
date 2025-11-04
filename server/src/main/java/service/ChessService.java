@@ -3,6 +3,7 @@ package service;
 import dataaccess.*;
 import exceptions.ResponseException;
 import model.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -40,10 +41,16 @@ public class ChessService {
         if (existingUser != null) {
             throw new RegistrationException();
         }
-        userDAO.createUser(registerRequest);
+        UserData hashedData = hashUserPassword(registerRequest);
+        userDAO.createUser(hashedData);
         AuthData authData = new AuthData(generateToken(), registerRequest.username());
         authDAO.createAuth(authData);
         return authData;
+    }
+
+    private UserData hashUserPassword(UserData userData) {
+        String hashedPass = BCrypt.hashpw(userData.password(), BCrypt.gensalt());
+        return new UserData(userData.username(), hashedPass, userData.email());
     }
 
     public AuthData login(LoginRequest loginRequest)
@@ -56,7 +63,7 @@ public class ChessService {
         if (user == null) {
             throw new UnauthorizedException();
         }
-        if (!Objects.equals(user.password(), loginRequest.password())) {
+        if (!BCrypt.checkpw(loginRequest.password(), user.password())) {
             throw new UnauthorizedException();
         }
         AuthData authData = new AuthData(generateToken(), user.username());
