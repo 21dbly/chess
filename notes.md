@@ -193,3 +193,20 @@ try (var preparedStatement = conn.preparedStatement("SELECT * from table WHERE i
 
 - Colors:
   `echo -e "\u001b[31;44;1m red on blue"`
+
+## Security
+
+- Authentication
+- Authorization
+- Data integrity
+- 
+
+### Hashing
+- fixed size
+- deterministic
+- one-way
+- resistant to collisions
+- preimage resistance
+- slow is good for passwords
+
+- salt
