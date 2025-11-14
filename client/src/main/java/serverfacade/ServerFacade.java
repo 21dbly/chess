@@ -50,8 +50,14 @@ public class ServerFacade {
         handleResponse(response, null);
     }
 
-    public Collection<GameData> listGames(String authToken) {
-        throw new RuntimeException("Not implemented");
+    public Collection<GameData> listGames(String authToken) throws ResponseException {
+        var request = buildRequest("GET", "/game", null, authToken);
+        var response = sendRequest(request);
+        var listResponse = handleResponse(response, ListGamesResponse.class);
+        if (listResponse == null) {
+            throw new ResponseException(520, "Server did not return a list of games");
+        }
+        return listResponse.games();
     }
 
     public void joinGame(String authToken, String playerColor, int gameID) {
