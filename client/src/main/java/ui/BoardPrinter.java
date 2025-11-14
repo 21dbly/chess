@@ -15,7 +15,7 @@ public class BoardPrinter {
     private static final String WHITE_PIECE = SET_TEXT_COLOR_RED;
     private static final String BLACK_PIECE = SET_TEXT_COLOR_BLUE;
 
-    public static String BoardPrintString(ChessBoard board, String color) {
+    public static String boardPrintString(ChessBoard board, String color) {
         StringBuilder retString = new StringBuilder();
 
         if (!(color.equals("WHITE") || color.equals("BLACK"))) {

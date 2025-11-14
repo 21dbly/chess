@@ -477,6 +477,6 @@ public class Main {
     }
 
     private static void printBoard(ChessBoard board, String playerColor) {
-        System.out.println(BoardPrinter.BoardPrintString(board, playerColor));
+        System.out.println(BoardPrinter.boardPrintString(board, playerColor));
     }
 }
