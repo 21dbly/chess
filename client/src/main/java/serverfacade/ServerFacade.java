@@ -60,8 +60,11 @@ public class ServerFacade {
         return listResponse.games();
     }
 
-    public void joinGame(String authToken, String playerColor, int gameID) {
-        throw new RuntimeException("Not implemented");
+    public void joinGame(String authToken, String playerColor, int gameID) throws ResponseException {
+        var joinGameRequest = new JoinGameRequest(playerColor, gameID);
+        var request = buildRequest("PUT", "/game", joinGameRequest, authToken);
+        var response = sendRequest(request);
+        handleResponse(response, null);
     }
 
     private HttpRequest buildRequest(String method, String path, Object body, String authToken) {
