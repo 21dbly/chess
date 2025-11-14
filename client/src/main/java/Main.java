@@ -1,9 +1,9 @@
-import chess.*;
 import exceptions.ResponseException;
 import model.GameData;
 import model.UserData;
 import serverfacade.ServerFacade;
 
+import java.util.List;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -20,6 +20,7 @@ public class Main {
     private static Boolean loggedIn;
     private static ServerFacade serverFacade;
     private static String authToken;
+    private static List<GameData> gamesList;
 
     private static void init() {
         loggedIn = false;
@@ -100,6 +101,14 @@ public class Main {
             case "li":
                 listGames();
                 break;
+            case "join":
+            case "j":
+                joinGame(args);
+                break;
+            case "observe":
+            case "o":
+//                observeGame(args);
+                break;
             default:
                 System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
                 help();
@@ -179,7 +188,7 @@ public class Main {
         System.out.println(ERROR_TEXT+ "An error occurred (" + statusCode + ").");
     }
 
-    private static void alreadyTakenError() {
+    private static void usernameTakenError() {
         System.out.println(ERROR_TEXT+ """
                 That username is already taken.""");
     }
@@ -189,6 +198,16 @@ public class Main {
                 Your authorization has expired, you will be logged out.""");
         loggedIn = false;
         authToken = null;
+    }
+
+    private static void gameDoesNotExistError() {
+        System.out.println(ERROR_TEXT+ """
+                That game does not exist.""");
+    }
+
+    private static void gameTakenError() {
+        System.out.println(ERROR_TEXT+ """
+                Someone is already playing that color in that game.""");
     }
 
     private static boolean registerVerify(String[] args) {
@@ -221,7 +240,7 @@ public class Main {
                     serverError();
                     break;
                 case 403:
-                    alreadyTakenError();
+                    usernameTakenError();
                     break;
                 default:
                     unknownError(e.code());
@@ -287,11 +306,11 @@ public class Main {
 
     private static void listGames() {
         try {
-            var games = serverFacade.listGames(authToken).stream().toList();
-            int iSize = String.valueOf(games.size()).length();
+            gamesList = serverFacade.listGames(authToken).stream().toList();
+            int iSize = String.valueOf(gamesList.size()).length();
             System.out.print(RESET_TEXT);
-            for (int i = 0; i < games.size(); i++) {
-                System.out.println(getGameListString(i+1, games.get(i), iSize, 20, 20, 20));
+            for (int i = 0; i < gamesList.size(); i++) {
+                System.out.println(getGameListString(i+1, gamesList.get(i), iSize, 20, 20, 20));
             }
 
         } catch (ResponseException e) {
@@ -340,5 +359,82 @@ public class Main {
             int rightPadding = padding - leftPadding;
             return " ".repeat(leftPadding) + string + " ".repeat(rightPadding);
         }
+    }
+
+    private static void joinGameHelp() {
+        System.out.println(ERROR_TEXT + """
+                    Usage:
+                    join <GAME_NUMBER> [WHITE|BLACK]
+                    """);
+    }
+
+    private static boolean joinGameVerify(String[] args) {
+        if (args.length < 3) {
+            joinGameHelp();
+            return false;
+        }
+        if (args[2].equalsIgnoreCase("WHITE") || (args[2].equalsIgnoreCase("W"))) {
+            args[2] = "WHITE";
+        } else if (args[2].equalsIgnoreCase("BLACK") || (args[2].equalsIgnoreCase("B"))) {
+            args[2] = "BLACK";
+        } else {
+            joinGameHelp();
+            return false;
+        }
+
+        try {
+            Integer.parseInt(args[1]);
+        } catch (Exception e) {
+            joinGameHelp();
+            return false;
+        }
+
+        return true;
+    }
+
+    private static void joinGame(String[] args) {
+        if (!joinGameVerify(args)) {
+            return;
+        }
+        int gameNumber = Integer.parseInt(args[1]);
+        if (gamesList == null) {
+            System.out.println(ERROR_TEXT+"You must list games before you can join one");
+            return;
+        }
+        if (gameNumber > gamesList.size()) {
+            gameDoesNotExistError();
+            return;
+        }
+        String playerColor = args[2];
+        GameData game = gamesList.get(gameNumber-1);
+        int gameID = game.gameID();
+        String gameName = game.gameName();
+
+        try {
+            serverFacade.joinGame(authToken, playerColor, gameID);
+            System.out.println(RESET_TEXT+"Success! You joined game '"+gameName+"'.");
+            printBoard(game);
+        } catch (ResponseException e) {
+            switch (e.code()) {
+                case 500:
+                    serverError();
+                    break;
+                case 400:
+                    gameDoesNotExistError();
+                    break;
+                case 401:
+                    unauthorizedError();
+                    break;
+                case 403:
+                    gameTakenError();
+                    break;
+                default:
+                    unknownError(e.code());
+            }
+        }
+    }
+
+    private static void printBoard(GameData game) {
+        System.out.println("board");
     }
 }
