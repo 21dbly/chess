@@ -29,7 +29,7 @@ public class ServerFacade {
         throw new RuntimeException("Not implemented");
     }
 
-    public int createGame(String authToken, String gameName) {
+    public void createGame(String authToken, String gameName) {
         throw new RuntimeException("Not implemented");
     }
 
