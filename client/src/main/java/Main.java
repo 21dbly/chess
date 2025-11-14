@@ -18,6 +18,7 @@ public class Main {
 
     private static Boolean loggedIn;
     private static ServerFacade serverFacade;
+    private static String authToken;
 
     private static void init() {
         loggedIn = false;
@@ -36,29 +37,19 @@ public class Main {
             if (splinput.length > 0) {
                 command = splinput[0];
             }
+            command = command.toLowerCase();
 
-            switch (command.toLowerCase()) {
-                case "help":
-                case "h":
-                    help();
-                    break;
-                case "quit":
-                case "q":
-                    System.out.println(RESET_TEXT+"Goodbye!");
-                    exit = true;
-                    break;
-                case "login":
-                case "l":
-                    login(splinput);
-                    break;
-                case "register":
-                case "r":
-                    register(splinput);
-                    break;
-                default:
-                    System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
-                    help();
-                    break;
+            if (command.equals("help") || command.equals("h")) {
+                help();
+            } else if (command.equals("quit") || command.equals("q")) {
+                exit = true;
+                System.out.println(RESET_TEXT+"Goodbye!");
+            } else {
+                if (!loggedIn) {
+                    evaluateLoggedOut(command, splinput);
+                } else {
+                    evaluateLoggedIn(command, splinput);
+                }
             }
         }
     }
@@ -70,6 +61,40 @@ public class Main {
 
     private static String getPrompt () {
         return RESET_TEXT + (loggedIn ? "[LOGGED_IN]" : "[LOGGED_OUT]");
+    }
+
+    private static void evaluateLoggedOut(String command, String[] args) {
+        switch (command) {
+            case "login":
+            case "l":
+                login(args);
+                break;
+            case "register":
+            case "r":
+                register(args);
+                break;
+            default:
+                System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
+                help();
+                break;
+        }
+    }
+
+    private static void evaluateLoggedIn(String command, String[] args) {
+        switch (command) {
+            case "login":
+            case "l":
+                login(args);
+                break;
+            case "register":
+            case "r":
+                register(args);
+                break;
+            default:
+                System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
+                help();
+                break;
+        }
     }
 
     private static final String LOGGED_OUT_HELP = HELP_TEXT + """
@@ -90,7 +115,7 @@ public class Main {
             """;
 
     private static void help() {
-        System.out.println(loggedIn ? LOGGED_IN_HELP : LOGGED_OUT_HELP);
+        System.out.print(loggedIn ? LOGGED_IN_HELP : LOGGED_OUT_HELP);
     }
 
     private static boolean loginVerify(String[] args) {
@@ -112,7 +137,9 @@ public class Main {
         String password = args[2];
 
         try {
-            serverFacade.login(username, password);
+            var authData = serverFacade.login(username, password);
+            loggedIn = true;
+            authToken = authData.authToken();
             System.out.println(RESET_TEXT+"Success! You are now logged in.");
         } catch (ResponseException e) {
             switch (e.code()) {
@@ -167,7 +194,9 @@ public class Main {
         String email = args[3];
 
         try {
-            serverFacade.register(new UserData(username, password, email));
+            var authData = serverFacade.register(new UserData(username, password, email));
+            loggedIn = true;
+            authToken = authData.authToken();
             System.out.println(RESET_TEXT+"Success! You are registered and logged in.");
         } catch (ResponseException e) {
             switch (e.code()) {
