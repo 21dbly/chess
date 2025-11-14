@@ -19,11 +19,11 @@ public class ServerFacadeTests {
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
 
-        facade = new ServerFacade("localhost:"+port);
+        facade = new ServerFacade("http://localhost:"+port);
     }
 
     @BeforeEach
-    public void clear() {
+    public void clear() throws ResponseException {
         facade.clear();
     }
 
@@ -37,7 +37,7 @@ public class ServerFacadeTests {
     final String game2Name = "game2?";
 
     @Test
-    public void registerValid() {
+    public void registerValid() throws ResponseException{
         AuthData authData = facade.register(user1);
         assertNotNull(authData);
         assertEquals(authData.username(), user1.username());
@@ -45,7 +45,7 @@ public class ServerFacadeTests {
     }
 
     @Test
-    public void registerExisting() {
+    public void registerExisting() throws ResponseException{
         facade.register(user1);
         assertThrows(ResponseException.class, () ->
                 facade.register(user1));

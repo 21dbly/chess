@@ -18,8 +18,10 @@ public class ServerFacade {
         this.serverUrl = serverUrl;
     }
 
-    public void clear() {
-        throw new RuntimeException("Not implemented");
+    public void clear() throws ResponseException {
+        var request = buildRequest("DELETE", "/db", null);
+        var response = sendRequest(request);
+        handleResponse(response, null);
     }
 
     public AuthData register(UserData userData) {
