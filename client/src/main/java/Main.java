@@ -107,7 +107,7 @@ public class Main {
                 break;
             case "observe":
             case "o":
-//                observeGame(args);
+                observeGame(args);
                 break;
             default:
                 System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
@@ -432,6 +432,46 @@ public class Main {
                     unknownError(e.code());
             }
         }
+    }
+
+    private static boolean observeGameVerify(String[] args) {
+        if (args.length < 2) {
+            System.out.println(ERROR_TEXT + """
+                    Usage:
+                    observe <GAME_NUMBER>
+                    """);
+            return false;
+        }
+
+        try {
+            Integer.parseInt(args[1]);
+        } catch (Exception e) {
+            joinGameHelp();
+            return false;
+        }
+
+        return true;
+    }
+
+    private static void observeGame(String[] args) {
+        if (!observeGameVerify(args)) {
+            return;
+        }
+        int gameNumber = Integer.parseInt(args[1]);
+        if (gamesList == null) {
+            System.out.println(ERROR_TEXT+"You must list games before you can join one");
+            return;
+        }
+        if (gameNumber > gamesList.size()) {
+            gameDoesNotExistError();
+            return;
+        }
+        GameData game = gamesList.get(gameNumber-1);
+        int gameID = game.gameID();
+        String gameName = game.gameName();
+
+        System.out.println(RESET_TEXT+"Success! You're watching game '"+gameName+"'.");
+        printBoard(game);
     }
 
     private static void printBoard(GameData game) {
