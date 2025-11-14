@@ -1,5 +1,6 @@
 import chess.*;
 import exceptions.ResponseException;
+import model.UserData;
 import serverfacade.ServerFacade;
 
 import java.util.Scanner;
@@ -49,6 +50,10 @@ public class Main {
                 case "login":
                 case "l":
                     login(splinput);
+                    break;
+                case "register":
+                case "r":
+                    register(splinput);
                     break;
                 default:
                     System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
@@ -108,6 +113,7 @@ public class Main {
 
         try {
             serverFacade.login(username, password);
+            System.out.println(RESET_TEXT+"Success! You are now logged in.");
         } catch (ResponseException e) {
             switch (e.code()) {
                 case 500:
@@ -134,5 +140,46 @@ public class Main {
 
     private static void unknownError(int statusCode) {
         System.out.println(ERROR_TEXT+ "An error occurred (" + statusCode + ").");
+    }
+
+    private static void alreadyTakenError() {
+        System.out.println(ERROR_TEXT+ """
+                That username is already taken.""");
+    }
+
+    private static boolean registerVerify(String[] args) {
+        if (args.length < 4) {
+            System.out.println(ERROR_TEXT + """
+                    Usage:
+                    register <USERNAME> <PASSWORD> <EMAIL>
+                    """);
+            return false;
+        }
+        return true;
+    }
+
+    private static void register(String[] args) {
+        if (!registerVerify(args)) {
+            return;
+        }
+        String username = args[1];
+        String password = args[2];
+        String email = args[3];
+
+        try {
+            serverFacade.register(new UserData(username, password, email));
+            System.out.println(RESET_TEXT+"Success! You are registered and logged in.");
+        } catch (ResponseException e) {
+            switch (e.code()) {
+                case 500:
+                    serverError();
+                    break;
+                case 403:
+                    alreadyTakenError();
+                    break;
+                default:
+                    unknownError(e.code());
+            }
+        }
     }
 }
