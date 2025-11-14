@@ -24,8 +24,10 @@ public class ServerFacade {
         handleResponse(response, null);
     }
 
-    public AuthData register(UserData userData) {
-        throw new RuntimeException("Not implemented");
+    public AuthData register(UserData userData) throws ResponseException {
+        var request = buildRequest("POST", "/user", userData);
+        var response = sendRequest(request);
+        return handleResponse(response, AuthData.class);
     }
 
     public AuthData login(String username, String password) {
