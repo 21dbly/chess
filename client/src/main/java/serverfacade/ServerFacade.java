@@ -30,8 +30,11 @@ public class ServerFacade {
         return handleResponse(response, AuthData.class);
     }
 
-    public AuthData login(String username, String password) {
-        throw new RuntimeException("Not implemented");
+    public AuthData login(String username, String password) throws ResponseException {
+        LoginRequest loginRequest = new LoginRequest(username, password);
+        var request = buildRequest("POST", "/session", loginRequest);
+        var response = sendRequest(request);
+        return handleResponse(response, AuthData.class);
     }
 
     public void logout(String authToken) {
