@@ -1,4 +1,6 @@
 import chess.*;
+import exceptions.ResponseException;
+import serverfacade.ServerFacade;
 
 import java.util.Scanner;
 
@@ -12,17 +14,29 @@ public class Main {
     private static final String INPUT_TEXT = SET_TEXT_COLOR_GREEN;
     private static final String HELP_TEXT = SET_TEXT_COLOR_MAGENTA;
     private static final String ERROR_TEXT = SET_TEXT_COLOR_RED;
+
     private static Boolean loggedIn;
+    private static ServerFacade serverFacade;
+
+    private static void init() {
+        loggedIn = false;
+        serverFacade = new ServerFacade("http://localhost:8080");
+    }
 
     public static void run() {
         System.out.println("♕ Welcome to 240 chess. Type Help to see the options. ♕");
-        loggedIn = false;
+        init();
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
             String input = getInput(scanner);
+            String[] splinput = input.split(" ");
+            String command = "";
+            if (splinput.length > 0) {
+                command = splinput[0];
+            }
 
-            switch (input.toLowerCase()) {
+            switch (command.toLowerCase()) {
                 case "help":
                 case "h":
                     help();
@@ -31,6 +45,10 @@ public class Main {
                 case "q":
                     System.out.println(RESET_TEXT+"Goodbye!");
                     exit = true;
+                    break;
+                case "login":
+                case "l":
+                    login(splinput);
                     break;
                 default:
                     System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
@@ -46,7 +64,7 @@ public class Main {
     }
 
     private static String getPrompt () {
-        return "\n" + RESET_TEXT + (loggedIn ? "[LOGGED_IN]" : "[LOGGED_OUT]");
+        return RESET_TEXT + (loggedIn ? "[LOGGED_IN]" : "[LOGGED_OUT]");
     }
 
     private static final String LOGGED_OUT_HELP = HELP_TEXT + """
@@ -68,5 +86,53 @@ public class Main {
 
     private static void help() {
         System.out.println(loggedIn ? LOGGED_IN_HELP : LOGGED_OUT_HELP);
+    }
+
+    private static boolean loginVerify(String[] args) {
+        if (args.length < 3) {
+            System.out.println(ERROR_TEXT + """
+                    Usage:
+                    login <USERNAME> <PASSWORD>
+                    """);
+            return false;
+        }
+        return true;
+    }
+
+    private static void login(String[] args) {
+        if (!loginVerify(args)) {
+            return;
+        }
+        String username = args[1];
+        String password = args[2];
+
+        try {
+            serverFacade.login(username, password);
+        } catch (ResponseException e) {
+            switch (e.code()) {
+                case 500:
+                    serverError();
+                    break;
+                case 401:
+                    invalidAuthenticationError();
+                    break;
+                default:
+                    unknownError(e.code());
+            }
+        }
+    }
+
+    private static void serverError() {
+        System.out.println(ERROR_TEXT+ """
+                There was a problem with the server or database.""");
+    }
+
+    private static void invalidAuthenticationError() {
+        System.out.println(ERROR_TEXT+ """
+                Your username or password was incorrect.""");
+    }
+
+    private static void unknownError(int statusCode) {
+        System.out.println(ERROR_TEXT+ "An error occurred (" + statusCode + ").");
     }
 }
