@@ -82,13 +82,9 @@ public class Main {
 
     private static void evaluateLoggedIn(String command, String[] args) {
         switch (command) {
-            case "login":
-            case "l":
-                login(args);
-                break;
-            case "register":
-            case "r":
-                register(args);
+            case "logout":
+            case "lo":
+                logout();
                 break;
             default:
                 System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
@@ -205,6 +201,28 @@ public class Main {
                     break;
                 case 403:
                     alreadyTakenError();
+                    break;
+                default:
+                    unknownError(e.code());
+            }
+        }
+    }
+
+    private static void logout() {
+        try {
+            serverFacade.logout(authToken);
+            loggedIn = false;
+            authToken = null;
+            System.out.println(RESET_TEXT+"Success! You are now logged out.");
+        } catch (ResponseException e) {
+            switch (e.code()) {
+                case 500:
+                    serverError();
+                    break;
+                case 401:
+                    System.out.println(RESET_TEXT+"Somehow you were not logged in.");
+                    loggedIn = false;
+                    authToken = null;
                     break;
                 default:
                     unknownError(e.code());
