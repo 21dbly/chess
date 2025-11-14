@@ -403,7 +403,7 @@ public class Main {
             System.out.println(ERROR_TEXT+"You must list games before you can join one");
             return;
         }
-        if (gameNumber > gamesList.size()) {
+        if (gameNumber > gamesList.size() || gameNumber < 0) {
             gameDoesNotExistError();
             return;
         }
@@ -464,7 +464,7 @@ public class Main {
             System.out.println(ERROR_TEXT+"You must list games before you can join one");
             return;
         }
-        if (gameNumber > gamesList.size()) {
+        if (gameNumber > gamesList.size() || gameNumber < 0) {
             gameDoesNotExistError();
             return;
         }
