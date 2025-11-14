@@ -18,16 +18,25 @@ public class Main {
         System.out.println("♕ Welcome to 240 chess. Type Help to see the options. ♕");
         loggedIn = false;
         Scanner scanner = new Scanner(System.in);
-        String input = getInput(scanner);
-        switch (input.toLowerCase()) {
-            case "help":
-            case "h":
-                help();
-                break;
-            default:
-                System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
-                help();
-                break;
+        boolean exit = false;
+        while (!exit) {
+            String input = getInput(scanner);
+
+            switch (input.toLowerCase()) {
+                case "help":
+                case "h":
+                    help();
+                    break;
+                case "quit":
+                case "q":
+                    System.out.println(RESET_TEXT+"Goodbye!");
+                    exit = true;
+                    break;
+                default:
+                    System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
+                    help();
+                    break;
+            }
         }
     }
 
