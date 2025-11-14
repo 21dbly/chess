@@ -75,6 +75,7 @@ public class ServerFacadeTests {
 
     @Test
     void logoutValid() throws ResponseException {
+        // requires listGames to work
         AuthData authData = facade.register(user1);
         facade.logout(authData.authToken());
         assertThrows(ResponseException.class, () ->
