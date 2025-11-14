@@ -52,6 +52,11 @@ public class Main {
                 }
             }
         }
+
+        if (loggedIn) {
+            try {serverFacade.logout(authToken);
+            } catch (ResponseException e) {}
+        }
     }
 
     private static String getInput(Scanner scanner) {
@@ -85,6 +90,10 @@ public class Main {
             case "logout":
             case "lo":
                 logout();
+                break;
+            case "create":
+            case "c":
+                createGame(args);
                 break;
             default:
                 System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
@@ -170,6 +179,13 @@ public class Main {
                 That username is already taken.""");
     }
 
+    private static void unauthorizedError() {
+        System.out.println(ERROR_TEXT+ """
+                Your authorization has expired, you will be logged out.""");
+        loggedIn = false;
+        authToken = null;
+    }
+
     private static boolean registerVerify(String[] args) {
         if (args.length < 4) {
             System.out.println(ERROR_TEXT + """
@@ -223,6 +239,40 @@ public class Main {
                     System.out.println(RESET_TEXT+"Somehow you were not logged in.");
                     loggedIn = false;
                     authToken = null;
+                    break;
+                default:
+                    unknownError(e.code());
+            }
+        }
+    }
+
+    private static boolean createGameVerify(String[] args) {
+        if (args.length < 2) {
+            System.out.println(ERROR_TEXT + """
+                    Usage:
+                    create <GAME_NAME>
+                    """);
+            return false;
+        }
+        return true;
+    }
+
+    private static void createGame(String[] args) {
+        if (!createGameVerify(args)) {
+            return;
+        }
+        String name = args[1];
+
+        try {
+            serverFacade.createGame(authToken, name);
+            System.out.println(RESET_TEXT+"Success! Your game was created. Type 'list' to see all games.");
+        } catch (ResponseException e) {
+            switch (e.code()) {
+                case 500:
+                    serverError();
+                    break;
+                case 401:
+                    unauthorizedError();
                     break;
                 default:
                     unknownError(e.code());
