@@ -43,8 +43,11 @@ public class ServerFacade {
         handleResponse(response, null);
     }
 
-    public void createGame(String authToken, String gameName) {
-        throw new RuntimeException("Not implemented");
+    public void createGame(String authToken, String gameName) throws ResponseException {
+        var createGameRequest = new CreateGameRequest(gameName);
+        var request = buildRequest("POST", "/game", createGameRequest, authToken);
+        var response = sendRequest(request);
+        handleResponse(response, null);
     }
 
     public Collection<GameData> listGames(String authToken) {
