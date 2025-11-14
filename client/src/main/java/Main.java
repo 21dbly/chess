@@ -1,5 +1,6 @@
 import chess.*;
 import exceptions.ResponseException;
+import model.GameData;
 import model.UserData;
 import serverfacade.ServerFacade;
 
@@ -94,6 +95,10 @@ public class Main {
             case "create":
             case "c":
                 createGame(args);
+                break;
+            case "list":
+            case "li":
+                listGames();
                 break;
             default:
                 System.out.println(ERROR_TEXT+"Invalid input. Here are your options:");
@@ -277,6 +282,63 @@ public class Main {
                 default:
                     unknownError(e.code());
             }
+        }
+    }
+
+    private static void listGames() {
+        try {
+            var games = serverFacade.listGames(authToken).stream().toList();
+            int iSize = String.valueOf(games.size()).length();
+            System.out.print(RESET_TEXT);
+            for (int i = 0; i < games.size(); i++) {
+                System.out.println(getGameListString(i+1, games.get(i), iSize, 20, 20, 20));
+            }
+
+        } catch (ResponseException e) {
+            switch (e.code()) {
+                case 500:
+                    serverError();
+                    break;
+                case 401:
+                    unauthorizedError();
+                    break;
+                default:
+                    unknownError(e.code());
+            }
+        }
+    }
+
+    private static String getGameListString
+            (int i, GameData game, int iSize, int nameSize, int whiteSize, int blackSize) {
+        String iString = String.valueOf(i);
+        if (iString.length() > iSize) {
+            int diff = iString.length() - iSize;
+            iString = iString.substring(diff);
+        } else {
+            iString = String.format("%"+iSize+"s", iString);
+        }
+
+        String nameString = shrinkOrPad(game.gameName(), nameSize);
+        String whiteName = game.whiteUsername();
+        if (whiteName == null) {whiteName = "";}
+        String whiteString = SET_BG_COLOR_WHITE+SET_TEXT_COLOR_DARK_GREY+
+                shrinkOrPad(whiteName, whiteSize)+RESET_TEXT;
+        String blackName = game.blackUsername();
+        if (blackName == null) {blackName = "";}
+        String blackString = SET_BG_COLOR_BLACK+SET_TEXT_COLOR_LIGHT_GREY+
+                shrinkOrPad(blackName, blackSize)+RESET_TEXT;
+
+        return iString+": "+nameString+" - "+whiteString+" - "+blackString;
+    }
+
+    private static String shrinkOrPad(String string, int size) {
+        if (string.length() > size) {
+            return string.substring(0, size-3) + "...";
+        } else {
+            int padding = size - string.length();
+            int leftPadding = padding / 2;
+            int rightPadding = padding - leftPadding;
+            return " ".repeat(leftPadding) + string + " ".repeat(rightPadding);
         }
     }
 }
