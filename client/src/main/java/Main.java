@@ -1,7 +1,9 @@
+import chess.ChessBoard;
 import exceptions.ResponseException;
 import model.GameData;
 import model.UserData;
 import serverfacade.ServerFacade;
+import ui.BoardPrinter;
 
 import java.util.List;
 import java.util.Scanner;
@@ -413,7 +415,7 @@ public class Main {
         try {
             serverFacade.joinGame(authToken, playerColor, gameID);
             System.out.println(RESET_TEXT+"Success! You joined game '"+gameName+"'.");
-            printBoard(game);
+            printBoard(game.game().getBoard(), playerColor);
         } catch (ResponseException e) {
             switch (e.code()) {
                 case 500:
@@ -471,10 +473,10 @@ public class Main {
         String gameName = game.gameName();
 
         System.out.println(RESET_TEXT+"Success! You're watching game '"+gameName+"'.");
-        printBoard(game);
+        printBoard(game.game().getBoard(), "WHITE");
     }
 
-    private static void printBoard(GameData game) {
-        System.out.println("board");
+    private static void printBoard(ChessBoard board, String playerColor) {
+        System.out.println(BoardPrinter.BoardPrintString(board, playerColor));
     }
 }
