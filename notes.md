@@ -199,7 +199,7 @@ try (var preparedStatement = conn.preparedStatement("SELECT * from table WHERE i
 - Authentication
 - Authorization
 - Data integrity
-- 
+- Non-Repudiation
 
 ### Hashing
 - fixed size
@@ -210,3 +210,23 @@ try (var preparedStatement = conn.preparedStatement("SELECT * from table WHERE i
 - slow is good for passwords
 
 - salt
+
+## concurrency
+different ways of executing:
+- sequential
+- concurrent
+- parallel
+
+os level concurrency: processes
+process level: threads
+
+### thread safety:
+Critical Resource: one or more things trying to edit the resource when multiple are reading
+Critical Section: the code that makes that edit
+Race Condition: when two things edit the resource at the same time (The critical resource is not protected)
+
+in java, protect with `synchronized (resource) {}`(uses object wait and notify)
+or protect by making it one cpu instruction
+examples: AtomicInteger, AtomicBoolean, BlockingQueue, ConcurrentHashMap, etc
+
+databases: use commits
