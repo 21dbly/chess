@@ -41,6 +41,32 @@ public class ChessPosition {
         return new ChessPosition(getRow() + row, getColumn() + col);
     }
 
+    /**
+     * @return a ChessPosition parsed from input or null if invalid form
+     */
+    public static ChessPosition parse(String input) {
+        if (input.length() < 2) {
+            return null;
+        }
+        input = input.toLowerCase();
+        char c = input.charAt(0); // column is letter, letter comes first
+        char r = input.charAt(1);
+        if (r == ' ' && input.length() >= 3) { // account for possible space in-between
+            r = input.charAt(2);
+        }
+        if (Character.isDigit(c)) { // allow switched order also
+            char temp = c;
+            c = r;
+            r = temp;
+        }
+        if (c < 'a' || c > 'h' || r < '1' || r > '8') {
+            return null;
+        }
+        int cInt = c - 'a' + 1;
+        int rInt = r - '1' + 1;
+        return new ChessPosition(rInt, cInt);
+    }
+
     @Override
     public String toString() {
         return String.format("%d%d", row, col);
