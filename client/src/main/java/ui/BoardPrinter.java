@@ -16,16 +16,26 @@ public class BoardPrinter {
     private static final String BLACK_PIECE = SET_TEXT_COLOR_BLUE;
 
     public static String boardPrintString(ChessBoard board, String color) {
-        StringBuilder retString = new StringBuilder();
-
         if (!(color.equals("WHITE") || color.equals("BLACK"))) {
             throw new RuntimeException("color must be WHITE or BLACK");
         }
+        ChessGame.TeamColor teamColor = color.equals("WHITE") ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+        return boardPrintString(board, teamColor);
+    }
 
-        int startRow = color.equals("WHITE") ? 9: 0;
-        int incrementRow = color.equals("WHITE") ? -1: 1;
-        int startCol = color.equals("WHITE") ? 0: 9;
-        int incrementCol = color.equals("WHITE") ? 1: -1;
+    public static String boardPrintString(ChessBoard board, ChessGame.TeamColor color) {
+        StringBuilder retString = new StringBuilder();
+
+        int startRow =  9;
+        int incrementRow = -1;
+        int startCol = 0;
+        int incrementCol = 1;
+        if (color.equals(ChessGame.TeamColor.BLACK)) {
+            startRow = 0;
+            incrementRow = 1;
+            startCol = 9;
+            incrementCol = -1;
+        }
 
         for (int r = startRow; r >= 0 && r <= 9; r += incrementRow) {
             for (int c = startCol; c >= 0 && c <= 9; c += incrementCol) {

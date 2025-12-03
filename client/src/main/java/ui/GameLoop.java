@@ -1,5 +1,8 @@
 package ui;
 
+import chess.ChessGame;
+import model.GameData;
+
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
@@ -7,13 +10,17 @@ import static ui.EscapeSequences.*;
 public class GameLoop {
 
     private final Scanner scanner;
+    private GameData gameData;
+    private ChessGame.TeamColor playerColor;
 
     public GameLoop(Scanner scanner) {
         this.scanner = scanner;
     }
 
-    public void joinGame(Scanner scanner) {
+    public void joinGame(GameData data, ChessGame.TeamColor color) {
         // websocket connection
+        gameData = data;
+        playerColor = color;
         loop();
     }
 
@@ -73,6 +80,9 @@ public class GameLoop {
     }
 
     private void redraw() {
+        var board = gameData.game().getBoard();
+        String boardString = BoardPrinter.boardPrintString(board, playerColor);
+        System.out.println(boardString);
     }
 
     private void leave() {

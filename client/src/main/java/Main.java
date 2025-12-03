@@ -1,4 +1,5 @@
 import chess.ChessBoard;
+import chess.ChessGame;
 import exceptions.ResponseException;
 import model.GameData;
 import model.UserData;
@@ -431,7 +432,8 @@ public class Main {
         // success
         System.out.println(RESET_TEXT+"Success! You joined game '"+gameName+"'.");
         printBoard(game.game().getBoard(), playerColor);
-        gameLoop.joinGame(scanner);
+        ChessGame.TeamColor teamColor = playerColor=="WHITE"? ChessGame.TeamColor.WHITE: ChessGame.TeamColor.BLACK;
+        gameLoop.joinGame(game, teamColor);
     }
 
     private static boolean observeGameVerify(String[] args) {
