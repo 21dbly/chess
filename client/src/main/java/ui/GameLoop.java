@@ -22,7 +22,7 @@ public class GameLoop {
     }
 
     private static String getInput(Scanner scanner) {
-        System.out.print("[IN_GAME] >>> " + INPUT_TEXT);
+        System.out.print(RESET_TEXT+"[IN_GAME] >>> " + INPUT_TEXT);
         return scanner.nextLine();
     }
 
@@ -30,11 +30,11 @@ public class GameLoop {
         boolean exit = false;
         while (!exit) {
             String input = getInput(scanner);
-            executeCommand(input.toLowerCase());
+            exit = executeCommand(input.toLowerCase());
         }
     }
 
-    private void executeCommand(String command) {
+    private boolean executeCommand(String command) {
         switch (command) {
             case "help":
                 help();
@@ -44,7 +44,7 @@ public class GameLoop {
                 break;
             case "leave":
                 leave();
-                break;
+                return true;
             case "move":
                 move();
                 break;
@@ -58,9 +58,18 @@ public class GameLoop {
                 help();
                 break;
         }
+        return false;
     }
 
     private void help() {
+        System.out.println(HELP_TEXT+ """
+                redraw - draw current state of chessboard
+                leave - leave the game
+                move - make a move
+                resign - forfeit the game
+                hint - highlight legal available moves
+                help - show possible commands
+                """);
     }
 
     private void redraw() {
