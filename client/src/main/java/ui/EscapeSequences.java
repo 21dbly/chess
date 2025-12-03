@@ -63,4 +63,9 @@ public class EscapeSequences {
     public static final String EMPTY = " \u2003 ";
 
     public static String moveCursorToLocation(int x, int y) { return UNICODE_ESCAPE + "[" + y + ";" + x + "H"; }
+
+    // the colors being used
+    public static final String INPUT_TEXT = SET_TEXT_COLOR_GREEN;
+    public static final String HELP_TEXT = SET_TEXT_COLOR_MAGENTA;
+    public static final String ERROR_TEXT = SET_TEXT_COLOR_RED;
 }

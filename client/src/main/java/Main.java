@@ -16,24 +16,24 @@ public class Main {
         run();
     }
 
-    private static final String INPUT_TEXT = SET_TEXT_COLOR_GREEN;
-    private static final String HELP_TEXT = SET_TEXT_COLOR_MAGENTA;
-    private static final String ERROR_TEXT = SET_TEXT_COLOR_RED;
-
     private static Boolean loggedIn;
     private static ServerFacade serverFacade;
     private static String authToken;
     private static List<GameData> gamesList;
 
+    private static Scanner scanner;
+    private static GameLoop gameLoop;
+
     private static void init() {
         loggedIn = false;
         serverFacade = new ServerFacade("http://localhost:8080");
+        scanner = new Scanner(System.in);
+        gameLoop = new GameLoop(scanner);
     }
 
     public static void run() {
         System.out.println("♕ Welcome to 240 chess. Type Help to see the options. ♕");
         init();
-        Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
             String input = getInput(scanner);
@@ -431,7 +431,7 @@ public class Main {
         // success
         System.out.println(RESET_TEXT+"Success! You joined game '"+gameName+"'.");
         printBoard(game.game().getBoard(), playerColor);
-        GameLoop.joinGame();
+        gameLoop.joinGame(scanner);
     }
 
     private static boolean observeGameVerify(String[] args) {
@@ -472,7 +472,7 @@ public class Main {
 
         System.out.println(RESET_TEXT+"Success! You're watching game '"+gameName+"'.");
         printBoard(game.game().getBoard(), "WHITE");
-        GameLoop.observeGame();
+        gameLoop.observeGame();
     }
 
     private static void printBoard(ChessBoard board, String playerColor) {
