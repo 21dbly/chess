@@ -1,6 +1,9 @@
 package ui;
 
+import chess.ChessBoard;
 import chess.ChessGame;
+import chess.ChessPiece;
+import chess.ChessPosition;
 import model.GameData;
 
 import java.util.Scanner;
@@ -81,7 +84,7 @@ public class GameLoop {
 
     private void redraw() {
         var board = gameData.game().getBoard();
-        String boardString = BoardPrinter.boardPrintString(board, playerColor);
+        String boardString = BoardPrinter.getString(board, playerColor);
         System.out.println(boardString);
     }
 
@@ -95,5 +98,22 @@ public class GameLoop {
     }
 
     private void hint() {
+        System.out.print(RESET_TEXT+"Enter a piece position: ");
+        String input = scanner.nextLine();
+        ChessPosition pos = ChessPosition.parse(input);
+        if (pos == null) {
+            System.out.println(ERROR_TEXT+ "That is not a valid position");
+            return;
+        }
+        ChessBoard board = gameData.game().getBoard();
+        ChessPiece piece = board.getPiece(pos);
+        if (piece == null) {
+            System.out.println(ERROR_TEXT+ "There is no piece at that position");
+            return;
+        }
+        var moves = piece.pieceMoves(board, pos);
+
+        String boardString = BoardPrinter.getString(board, playerColor, pos, moves);
+        System.out.println(boardString);
     }
 }
