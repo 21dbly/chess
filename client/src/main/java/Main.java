@@ -4,6 +4,7 @@ import model.GameData;
 import model.UserData;
 import serverfacade.ServerFacade;
 import ui.BoardPrinter;
+import ui.GameLoop;
 
 import java.util.List;
 import java.util.Scanner;
@@ -177,13 +178,11 @@ public class Main {
     }
 
     private static void serverError() {
-        System.out.println(ERROR_TEXT+ """
-                There was a problem with the server or database.""");
+        System.out.println(ERROR_TEXT+ "There was a problem with the server or database.");
     }
 
     private static void invalidAuthenticationError() {
-        System.out.println(ERROR_TEXT+ """
-                Your username or password was incorrect.""");
+        System.out.println(ERROR_TEXT+ "Your username or password was incorrect.");
     }
 
     private static void unknownError(int statusCode) {
@@ -191,25 +190,21 @@ public class Main {
     }
 
     private static void usernameTakenError() {
-        System.out.println(ERROR_TEXT+ """
-                That username is already taken.""");
+        System.out.println(ERROR_TEXT+ "That username is already taken.");
     }
 
     private static void unauthorizedError() {
-        System.out.println(ERROR_TEXT+ """
-                Your authorization has expired, you will be logged out.""");
+        System.out.println(ERROR_TEXT+ "Your authorization has expired, you will be logged out.");
         loggedIn = false;
         authToken = null;
     }
 
     private static void gameDoesNotExistError() {
-        System.out.println(ERROR_TEXT+ """
-                That game does not exist.""");
+        System.out.println(ERROR_TEXT+ "That game does not exist.");
     }
 
     private static void gameTakenError() {
-        System.out.println(ERROR_TEXT+ """
-                Someone is already playing that color in that game.""");
+        System.out.println(ERROR_TEXT+ "Someone is already playing that color in that game.");
     }
 
     private static boolean registerVerify(String[] args) {
@@ -414,8 +409,6 @@ public class Main {
 
         try {
             serverFacade.joinGame(authToken, playerColor, gameID);
-            System.out.println(RESET_TEXT+"Success! You joined game '"+gameName+"'.");
-            printBoard(game.game().getBoard(), playerColor);
         } catch (ResponseException e) {
             switch (e.code()) {
                 case 500:
@@ -433,7 +426,12 @@ public class Main {
                 default:
                     unknownError(e.code());
             }
+            return;
         }
+        // success
+        System.out.println(RESET_TEXT+"Success! You joined game '"+gameName+"'.");
+        printBoard(game.game().getBoard(), playerColor);
+        GameLoop.joinGame();
     }
 
     private static boolean observeGameVerify(String[] args) {
@@ -461,7 +459,7 @@ public class Main {
         }
         int gameNumber = Integer.parseInt(args[1]);
         if (gamesList == null) {
-            System.out.println(ERROR_TEXT+"You must list games before you can join one");
+            System.out.println(ERROR_TEXT+"You must list games before you can observe one");
             return;
         }
         if (gameNumber > gamesList.size() || gameNumber < 0) {
@@ -474,6 +472,7 @@ public class Main {
 
         System.out.println(RESET_TEXT+"Success! You're watching game '"+gameName+"'.");
         printBoard(game.game().getBoard(), "WHITE");
+        GameLoop.observeGame();
     }
 
     private static void printBoard(ChessBoard board, String playerColor) {
