@@ -5,6 +5,7 @@ import dataaccess.*;
 import io.javalin.websocket.*;
 import org.eclipse.jetty.websocket.api.Session;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
@@ -52,15 +53,21 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
     private void connect(int gameID, String authToken, Session session) throws IOException, DataAccessException {
         var game = gameDAO.getGame(gameID);
         if (game == null) {
+            session.getRemote().sendString((new ErrorMessage("That game does not exist")).toString());
             return;
         }
-        var user = authDAO.getAuth(authToken).username();
+        var user = authDAO.getAuth(authToken);
+        if (user == null) {
+            session.getRemote().sendString((new ErrorMessage("Unauthorized")).toString());
+            return;
+        }
+        String username = user.username();
 
         // add session to connectionManager
         PlayerType playerType;
-        if (game.whiteUsername().equals(user) && !connections.hasWhite(gameID)) {
+        if (game.whiteUsername().equals(username) && !connections.hasWhite(gameID)) {
             playerType = PlayerType.WHITE;
-        } else if (game.blackUsername().equals(user) && !connections.hasBlack(gameID)) {
+        } else if (game.blackUsername().equals(username) && !connections.hasBlack(gameID)) {
             playerType = PlayerType.BLACK;
         } else {
             playerType = PlayerType.OBSERVER;
@@ -77,7 +84,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             case BLACK -> "Black";
             case OBSERVER -> "an observer";
         };
-        var notifyMessage = new NotificationMessage("'%s' has joined the game as %s.".formatted(user, playerTypeStr));
+        var notifyMessage = new NotificationMessage("'%s' has joined the game as %s.".formatted(username, playerTypeStr));
         connections.broadcast(gameID, notifyMessage, session);
     }
 }
