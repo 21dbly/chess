@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import exceptions.ResponseException;
 import jakarta.websocket.*;
 import ui.ServerMessageObserver;
+import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
 import java.io.IOException;
@@ -38,5 +39,14 @@ public class WebSocketFacade extends Endpoint {
 
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
+    }
+
+    public void connect(int gameID, String authToken) {
+        try {
+            var command = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable to parse command: %s".formatted(ex.getMessage()));
+        }
     }
 }

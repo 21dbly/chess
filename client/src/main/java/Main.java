@@ -438,7 +438,7 @@ public class Main {
         System.out.println(RESET_TEXT+"Success! You joined game '"+gameName+"'.");
         printBoard(game.game().getBoard(), playerColor);
         ChessGame.TeamColor teamColor = playerColor=="WHITE"? ChessGame.TeamColor.WHITE: ChessGame.TeamColor.BLACK;
-        gameLoop.joinGame(game, teamColor);
+        gameLoop.joinGame(game, teamColor, authToken);
     }
 
     private static boolean observeGameVerify(String[] args) {

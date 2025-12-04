@@ -25,8 +25,8 @@ public class GameLoop implements ServerMessageObserver {
         ws = new WebSocketFacade(serverUrl, this);
     }
 
-    public void joinGame(GameData data, ChessGame.TeamColor color) {
-        // websocket connection
+    public void joinGame(GameData data, ChessGame.TeamColor color, String authToken) {
+        ws.connect(data.gameID(), authToken);
         gameData = data;
         playerColor = color;
         loop();
