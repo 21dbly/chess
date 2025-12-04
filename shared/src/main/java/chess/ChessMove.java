@@ -51,11 +51,25 @@ public class ChessMove {
         return promotionPiece;
     }
 
+    /**
+     * Finds the color of the piece at the start position of this move
+     * given a chess board
+     *
+     * @return color of piece or null if there is no piece at that position
+     */
+    public ChessGame.TeamColor getMoveColor(ChessBoard board) {
+        var piece = board.getPiece(getStartPosition());
+        if (piece == null) {
+            return null;
+        }
+        return piece.getTeamColor();
+    }
+
     @Override
     public String toString() {
         String promotionNote = "";
-        if (promotionPiece != null) { promotionNote = String.format("(%s)",promotionPiece); }
-        return String.format("%s:%s%s", startPosition, endPosition, promotionNote);
+        if (promotionPiece != null) { promotionNote = String.format(" (%s)",promotionPiece); }
+        return String.format("%s to %s%s", startPosition, endPosition, promotionNote);
     }
 
     @Override

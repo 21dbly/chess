@@ -69,7 +69,7 @@ public class ChessPosition {
 
     @Override
     public String toString() {
-        return String.format("%d%d", row, col);
+        return String.format("%c%d", col-1+'a', row);
     }
 
     @Override

@@ -57,8 +57,12 @@ public class ConnectionManager {
             return;
         }
         String strMessage = message.toString();
-        sendIfNotExclude(gameConnections.white, strMessage, exclude);
-        sendIfNotExclude(gameConnections.black, strMessage, exclude);
+        if (gameConnections.white != null) {
+            sendIfNotExclude(gameConnections.white, strMessage, exclude);
+        }
+        if (gameConnections.black != null) {
+            sendIfNotExclude(gameConnections.black, strMessage, exclude);
+        }
         for (Session session : gameConnections.observers) {
             sendIfNotExclude(session, strMessage, exclude);
         }
@@ -68,7 +72,24 @@ public class ConnectionManager {
         if (session.equals(exclude)) {
             return;
         }
+        if (!session.isOpen()) {
+            return;
+        }
         session.getRemote().sendString(message);
+    }
+
+    public PlayerType findSessionType(int gameID, Session session) {
+        var gameConnection = connections.get(gameID);
+        if (session.equals(gameConnection.white)) {
+            return PlayerType.WHITE;
+        }
+        if (session.equals(gameConnection.black)) {
+            return PlayerType.BLACK;
+        }
+        if (gameConnection.observers.contains(session)) {
+            return PlayerType.OBSERVER;
+        }
+        return PlayerType.UNAUTHORIZED;
     }
 
     private static class GameConnections {
@@ -82,4 +103,7 @@ public class ConnectionManager {
             observers = new ArrayList<Session>();
         }
     }
+
+    // add a way to clear connection manager? That's probably causing problems when making multiple
+    // games with the same id?
 }

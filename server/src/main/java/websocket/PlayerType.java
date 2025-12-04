@@ -3,5 +3,6 @@ package websocket;
 public enum PlayerType {
     WHITE,
     BLACK,
-    OBSERVER
+    OBSERVER,
+    UNAUTHORIZED
 }

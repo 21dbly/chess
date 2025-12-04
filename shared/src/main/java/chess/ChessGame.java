@@ -45,7 +45,11 @@ public class ChessGame {
      */
     public enum TeamColor {
         WHITE,
-        BLACK
+        BLACK;
+
+        public TeamColor opposite() {
+            return this.equals(WHITE) ? BLACK : WHITE;
+        }
     }
 
     /**
