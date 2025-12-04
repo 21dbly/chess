@@ -27,9 +27,14 @@ public class Main {
 
     private static void init() {
         loggedIn = false;
-        serverFacade = new ServerFacade("http://localhost:8080");
+        String serverUrl = "http://localhost:8080";
+        serverFacade = new ServerFacade(serverUrl);
         scanner = new Scanner(System.in);
-        gameLoop = new GameLoop(scanner);
+        try {
+            gameLoop = new GameLoop(scanner, serverUrl);
+        } catch (Throwable ex) {
+            System.out.printf("Unable to start gameLoop: %s%n", ex.getMessage());
+        }
     }
 
     public static void run() {

@@ -4,20 +4,25 @@ import chess.ChessBoard;
 import chess.ChessGame;
 import chess.ChessPiece;
 import chess.ChessPosition;
+import exceptions.ResponseException;
 import model.GameData;
+import serverfacade.WebSocketFacade;
+import websocket.messages.ServerMessage;
 
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
 
-public class GameLoop {
+public class GameLoop implements ServerMessageObserver {
 
     private final Scanner scanner;
     private GameData gameData;
     private ChessGame.TeamColor playerColor;
+    private final WebSocketFacade ws;
 
-    public GameLoop(Scanner scanner) {
+    public GameLoop(Scanner scanner, String serverUrl) throws ResponseException {
         this.scanner = scanner;
+        ws = new WebSocketFacade(serverUrl, this);
     }
 
     public void joinGame(GameData data, ChessGame.TeamColor color) {
@@ -115,5 +120,10 @@ public class GameLoop {
 
         String boardString = BoardPrinter.getString(board, playerColor, pos, moves);
         System.out.println(boardString);
+    }
+
+    @Override
+    public void notify(ServerMessage message) {
+
     }
 }
