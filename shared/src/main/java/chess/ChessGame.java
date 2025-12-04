@@ -17,11 +17,22 @@ public class ChessGame {
     private TeamColor turn;
     private ChessBoard board;
     private ChessMove prevMove;
+    private TeamColor winner;
+    private boolean gameOver;
 
     public ChessGame() {
         turn = TeamColor.WHITE;
         board = new ChessBoard();
         board.resetBoard();
+        gameOver = false;
+    }
+
+    public TeamColor getWinner() {
+        return winner;
+    }
+
+    public boolean isOver() {
+        return gameOver;
     }
 
     /**
@@ -161,6 +172,9 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        if (isOver()) {
+            throw new InvalidMoveException("Game is over");
+        }
         ChessPiece piece = board.getPiece(move.getStartPosition());
         if (piece == null) {
             throw new InvalidMoveException("No Piece");
@@ -174,6 +188,22 @@ public class ChessGame {
         board.movePiece(move);
         switchTurn();
         prevMove = move;
+
+        if (isInCheckmate(turn)) {
+            winner = turn.opposite();
+            gameOver = true;
+        }
+        else if (isInStalemate(turn)) {
+            winner = null;
+            gameOver = true;
+        }
+    }
+
+    public void resign(TeamColor team) {
+        if (!isOver()) {
+            gameOver = true;
+            winner = team.opposite();
+        }
     }
 
     private void switchTurn() {

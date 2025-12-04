@@ -54,6 +54,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
                 case CONNECT -> connect(command.getGameID(), command.getAuthToken(), ctx.session);
                 case MAKE_MOVE -> makeMove((MakeMoveCommand)command, ctx.session);
                 case LEAVE -> leave(command.getGameID(), command.getAuthToken(), ctx.session);
+                case RESIGN -> resign(command.getGameID(), command.getAuthToken(), ctx.session);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -119,6 +120,10 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         String username = authData.username();
 
         // check if game is over
+        if (game.isOver()) {
+            sendError(session, "The game is over");
+            return;
+        }
 
         // verify correct color
         var playerType = connections.findSessionType(gameID, session);
@@ -214,6 +219,46 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             blackName = null;
         }
         return new GameData(gameID, whiteName, blackName, gameName, game);
+    }
+
+    public void resign(int gameID, String authToken, Session session) throws DataAccessException, IOException {
+        AuthData authData = authDAO.getAuth(authToken);
+        if (authData == null) {
+            sendError(session, "You are not logged in");
+            return;
+        }
+        String username = authData.username();
+
+        GameData gameData = gameDAO.getGame(gameID);
+        if (gameData == null) {
+            sendError(session, "That game does not exist");
+            return;
+        }
+
+        var playerType = connections.findSessionType(gameID, session);
+        if (playerType == PlayerType.UNAUTHORIZED || playerType == PlayerType.OBSERVER) {
+            sendError(session, "You are not playing that game");
+            return;
+        }
+
+        if (gameData.game().isOver()) {
+            sendError(session, "Game is over");
+            return;
+        }
+
+        ChessGame.TeamColor teamColor;
+        if (playerType == PlayerType.WHITE) {
+            teamColor = ChessGame.TeamColor.WHITE;
+        } else {
+            teamColor = ChessGame.TeamColor.BLACK;
+        }
+        gameData.game().resign(teamColor);
+        gameDAO.updateGame(gameData);
+        ChessGame.TeamColor winner = teamColor.opposite();
+
+        String notifyString = "'%s' has resigned. %s wins!".formatted(username, winner.name());
+        var notifyMessage = new NotificationMessage(notifyString);
+        connections.broadcast(gameID, notifyMessage, null);
     }
 
     private void sendError(Session session, String errorMessage) throws IOException {
