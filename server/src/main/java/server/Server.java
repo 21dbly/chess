@@ -56,6 +56,7 @@ public class Server {
 
     private void clear(Context ctx) throws DataAccessException {
         service.clear();
+        webSocketHandler.clearConnections();
     }
 
     private void register(Context ctx) throws DataAccessException, RegistrationException, BadRequestException {

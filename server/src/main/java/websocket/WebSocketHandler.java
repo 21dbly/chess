@@ -180,4 +180,8 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         String username = authData.username();
         return connections.findSessionType(gameID, session);
     }
+
+    public void clearConnections() {
+        connections.clear();
+    }
 }

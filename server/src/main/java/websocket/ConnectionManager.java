@@ -104,6 +104,7 @@ public class ConnectionManager {
         }
     }
 
-    // add a way to clear connection manager? That's probably causing problems when making multiple
-    // games with the same id?
+    public void clear() {
+        connections.clear();
+    }
 }
