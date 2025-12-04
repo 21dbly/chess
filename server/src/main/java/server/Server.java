@@ -7,11 +7,13 @@ import io.javalin.*;
 import io.javalin.http.Context;
 import model.*;
 import service.*;
+import websocket.WebSocketHandler;
 
 public class Server {
 
     private final Javalin javalin;
     private final ChessService service;
+    private final WebSocketHandler webSocketHandler;
 
     public Server() {
         try {
@@ -19,6 +21,8 @@ public class Server {
         } catch (DataAccessException e) {
             throw new RuntimeException("Error: Unable to create service while starting server: ", e);
         }
+
+        webSocketHandler = new WebSocketHandler();
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
                 .delete("/db", this::clear)
@@ -28,9 +32,12 @@ public class Server {
                 .post("/game", this::createGame)
                 .get("/game", this::listGames)
                 .put("/game", this::joinGame)
-                .exception(ResponseException.class, this::exceptionHandler);
-        // Register your endpoints and exception handlers here.
-
+                .exception(ResponseException.class, this::exceptionHandler)
+                .ws("/ws", ws -> {
+                    ws.onConnect(webSocketHandler);
+                    ws.onMessage(webSocketHandler);
+                    ws.onClose(webSocketHandler);
+                });
     }
 
     public int run(int desiredPort) {
