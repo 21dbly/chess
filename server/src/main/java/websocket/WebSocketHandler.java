@@ -1,23 +1,25 @@
 package websocket;
 
 import com.google.gson.Gson;
-import dataaccess.DataAccessException;
-import dataaccess.GameDAO;
-import dataaccess.SQLGameDAO;
+import dataaccess.*;
 import io.javalin.websocket.*;
 import org.eclipse.jetty.websocket.api.Session;
 import websocket.commands.UserGameCommand;
 import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
 import java.io.IOException;
 
 public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsCloseHandler {
-    GameDAO gameDAO;
+    private final GameDAO gameDAO;
+    private final AuthDAO authDAO;
+    private final ConnectionManager connections = new ConnectionManager();
 
     public WebSocketHandler() {
         try {
             gameDAO = new SQLGameDAO();
+            authDAO = new SQLAuthDAO();
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }
@@ -52,9 +54,30 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         if (game == null) {
             return;
         }
-        // add to connectionManager using gameID and session
-        String message = new LoadGameMessage(game.game().getBoard()).toString();
-        session.getRemote().sendString(message);
+        var user = authDAO.getAuth(authToken).username();
+
+        // add session to connectionManager
+        PlayerType playerType;
+        if (game.whiteUsername().equals(user) && !connections.hasWhite(gameID)) {
+            playerType = PlayerType.WHITE;
+        } else if (game.blackUsername().equals(user) && !connections.hasBlack(gameID)) {
+            playerType = PlayerType.BLACK;
+        } else {
+            playerType = PlayerType.OBSERVER;
+        }
+        connections.add(gameID, session, playerType);
+
+        // send load game message to root
+        String loadMessage = new LoadGameMessage(game.game().getBoard()).toString();
+        session.getRemote().sendString(loadMessage);
+
         // broadcast to others
+        String playerTypeStr = switch (playerType) {
+            case WHITE -> "White";
+            case BLACK -> "Black";
+            case OBSERVER -> "an observer";
+        };
+        var notifyMessage = new NotificationMessage("'%s' has joined the game as %s.".formatted(user, playerTypeStr));
+        connections.broadcast(gameID, notifyMessage, session);
     }
 }
