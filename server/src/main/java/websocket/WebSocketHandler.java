@@ -53,6 +53,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             switch (command.getCommandType()) {
                 case CONNECT -> connect(command.getGameID(), command.getAuthToken(), ctx.session);
                 case MAKE_MOVE -> makeMove((MakeMoveCommand)command, ctx.session);
+                case LEAVE -> leave(command.getGameID(), command.getAuthToken(), ctx.session);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -166,6 +167,53 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         else if (game.isInStalemate(opposite)) {
             connections.broadcast(gameID, new NotificationMessage("%s is in stalemate.".formatted(opposite.name())), null);
         }
+    }
+
+    public void leave(int gameID, String authToken, Session session) throws DataAccessException, IOException {
+        AuthData authData = authDAO.getAuth(authToken);
+        if (authData == null) {
+            sendError(session, "You are not logged in");
+            return;
+        }
+        String username = authData.username();
+
+        GameData gameData = gameDAO.getGame(gameID);
+        if (gameData == null) {
+            sendError(session, "That game does not exist");
+            return;
+        }
+
+        var playerType = connections.findSessionType(gameID, session);
+        if (playerType == PlayerType.UNAUTHORIZED) {
+            sendError(session, "You are not in that game");
+            return;
+        }
+        connections.remove(gameID, session);
+        if (playerType == PlayerType.WHITE) {
+            gameDAO.updateGame(removedPlayer(gameData, ChessGame.TeamColor.WHITE));
+        }
+        else if (playerType == PlayerType.BLACK) {
+            gameDAO.updateGame(removedPlayer(gameData, ChessGame.TeamColor.BLACK));
+        }
+
+        String notifyString = "'%s' has left the game.".formatted(username);
+        var notifyMessage = new NotificationMessage(notifyString);
+        connections.broadcast(gameID, notifyMessage, null);
+    }
+
+    private GameData removedPlayer(GameData gameData, ChessGame.TeamColor colorToRemove) {
+        String whiteName = gameData.whiteUsername();
+        String blackName = gameData.blackUsername();
+        String gameName = gameData.gameName();
+        int gameID = gameData.gameID();
+        ChessGame game = gameData.game();
+        if (ChessGame.TeamColor.WHITE.equals(colorToRemove)) {
+            whiteName = null;
+        }
+        else if (ChessGame.TeamColor.BLACK.equals(colorToRemove)) {
+            blackName = null;
+        }
+        return new GameData(gameID, whiteName, blackName, gameName, game);
     }
 
     private void sendError(Session session, String errorMessage) throws IOException {

@@ -92,6 +92,19 @@ public class ConnectionManager {
         return PlayerType.UNAUTHORIZED;
     }
 
+    public boolean remove(int gameID, Session session) {
+        var gameConnection = connections.get(gameID);
+        if (session.equals(gameConnection.white)) {
+            gameConnection.white = null;
+            return true;
+        }
+        if (session.equals(gameConnection.black)) {
+            gameConnection.black = null;
+            return true;
+        }
+        return gameConnection.observers.remove(session);
+    }
+
     private static class GameConnections {
         public Session white;
         public Session black;
