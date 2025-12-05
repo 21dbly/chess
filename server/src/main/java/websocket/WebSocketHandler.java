@@ -265,15 +265,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         session.getRemote().sendString((new ErrorMessage(errorMessage)).toString());
     }
 
-    private PlayerType getPlayerType(Session session, int gameID, String authToken) throws DataAccessException {
-        var authData = authDAO.getAuth(authToken);
-        if (authData == null) {
-            return PlayerType.UNAUTHORIZED;
-        }
-        String username = authData.username();
-        return connections.findSessionType(gameID, session);
-    }
-
     public void clearConnections() {
         connections.clear();
     }
