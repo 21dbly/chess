@@ -7,6 +7,7 @@ import chess.ChessPosition;
 import exceptions.ResponseException;
 import model.GameData;
 import serverfacade.WebSocketFacade;
+import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
 import java.util.Scanner;
@@ -165,6 +166,10 @@ public class GameLoop implements ServerMessageObserver {
 
     @Override
     public void notify(ServerMessage message) {
-
+        switch (message.getServerMessageType()) {
+            case NOTIFICATION:
+                String messageStr = ((NotificationMessage) message).getMessage();
+                System.out.println(RESET_TEXT+ messageStr);
+        }
     }
 }

@@ -5,6 +5,9 @@ import exceptions.ResponseException;
 import jakarta.websocket.*;
 import ui.ServerMessageObserver;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
 import java.io.IOException;
@@ -28,7 +31,7 @@ public class WebSocketFacade extends Endpoint {
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String messageStr) {
-                    ServerMessage message = new Gson().fromJson(messageStr, ServerMessage.class);
+                    ServerMessage message = parseServerMessage(messageStr);
                     serverMessageObserver.notify(message);
                 }
             });
@@ -48,5 +51,16 @@ public class WebSocketFacade extends Endpoint {
         } catch (IOException ex) {
             throw new RuntimeException("Unable to parse command: %s".formatted(ex.getMessage()));
         }
+    }
+
+    private ServerMessage parseServerMessage(String s) {
+        // I don't like this solution but don't have time for something better
+        var gson = new Gson();
+        var message = gson.fromJson(s, ServerMessage.class);
+        return switch (message.getServerMessageType()) {
+            case NOTIFICATION -> gson.fromJson(s, NotificationMessage.class);
+            case ERROR -> gson.fromJson(s, ErrorMessage.class);
+            case LOAD_GAME -> gson.fromJson(s, LoadGameMessage.class);
+        };
     }
 }
