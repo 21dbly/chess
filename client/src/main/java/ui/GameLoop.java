@@ -32,20 +32,31 @@ public class GameLoop implements ServerMessageObserver {
         loop();
     }
 
-    public void observeGame() {
-        // websocket connection
+    public void observeGame(GameData data, String authToken) {
+        ws.connect(data.gameID(), authToken);
+        gameData = data;
+        playerColor = ChessGame.TeamColor.WHITE;
+        observeLoop();
     }
 
-    private static String getInput(Scanner scanner) {
-        System.out.print(RESET_TEXT+"[IN_GAME] >>> " + INPUT_TEXT);
+    private static String getInput(Scanner scanner, String state) {
+        System.out.print(RESET_TEXT+"["+state+"] >>> " + INPUT_TEXT);
         return scanner.nextLine();
     }
 
     private void loop() {
         boolean exit = false;
         while (!exit) {
-            String input = getInput(scanner);
+            String input = getInput(scanner, "IN_GAME");
             exit = executeCommand(input.toLowerCase());
+        }
+    }
+
+    private void observeLoop() {
+        boolean exit = false;
+        while (!exit) {
+            String input = getInput(scanner, "OBSERVING");
+            exit = executeObserveCommand(input.toLowerCase());
         }
     }
 
@@ -76,12 +87,42 @@ public class GameLoop implements ServerMessageObserver {
         return false;
     }
 
+    private boolean executeObserveCommand(String command) {
+        switch (command) {
+            case "help":
+                observeHelp();
+                break;
+            case "redraw":
+                redraw();
+                break;
+            case "leave":
+                leave();
+                return true;
+            case "hint":
+                hint();
+                break;
+            default:
+                observeHelp();
+                break;
+        }
+        return false;
+    }
+
     private void help() {
         System.out.println(HELP_TEXT+ """
                 redraw - draw current state of chessboard
                 leave - leave the game
                 move - make a move
                 resign - forfeit the game
+                hint - highlight legal available moves
+                help - show possible commands
+                """);
+    }
+
+    private void observeHelp() {
+        System.out.println(HELP_TEXT+ """
+                redraw - draw current state of chessboard
+                leave - leave the game
                 hint - highlight legal available moves
                 help - show possible commands
                 """);

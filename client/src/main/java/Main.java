@@ -479,7 +479,7 @@ public class Main {
 
         System.out.println(RESET_TEXT+"Success! You're watching game '"+gameName+"'.");
         printBoard(game.game().getBoard(), "WHITE");
-        gameLoop.observeGame();
+        gameLoop.observeGame(game, authToken);
     }
 
     private static void printBoard(ChessBoard board, String playerColor) {
