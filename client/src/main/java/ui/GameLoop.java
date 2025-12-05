@@ -7,6 +7,8 @@ import chess.ChessPosition;
 import exceptions.ResponseException;
 import model.GameData;
 import serverfacade.WebSocketFacade;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
@@ -166,10 +168,20 @@ public class GameLoop implements ServerMessageObserver {
 
     @Override
     public void notify(ServerMessage message) {
+        String messageStr;
         switch (message.getServerMessageType()) {
             case NOTIFICATION:
-                String messageStr = ((NotificationMessage) message).getMessage();
+                messageStr = ((NotificationMessage) message).getMessage();
                 System.out.println(RESET_TEXT+ messageStr);
+                break;
+            case ERROR:
+                messageStr = ((ErrorMessage) message).getMessage();
+                System.out.println(ERROR_TEXT+ messageStr);
+                break;
+            case LOAD_GAME:
+                ChessBoard board = ((LoadGameMessage) message).getGame();
+                System.out.println(BoardPrinter.getString(board, playerColor));
+                break;
         }
     }
 }
