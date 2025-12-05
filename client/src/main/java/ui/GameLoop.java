@@ -16,7 +16,8 @@ import static ui.EscapeSequences.*;
 public class GameLoop implements ServerMessageObserver {
 
     private final Scanner scanner;
-    private GameData gameData;
+    private ChessGame game;
+    private int gameID;
     private ChessGame.TeamColor playerColor;
     private final WebSocketFacade ws;
     private String authToken;
@@ -29,7 +30,8 @@ public class GameLoop implements ServerMessageObserver {
     public void joinGame(GameData data, ChessGame.TeamColor color, String authToken) {
         this.authToken = authToken;
         ws.connect(data.gameID(), authToken);
-        gameData = data;
+        game = data.game();
+        gameID = data.gameID();
         playerColor = color;
         loop();
     }
@@ -37,7 +39,8 @@ public class GameLoop implements ServerMessageObserver {
     public void observeGame(GameData data, String authToken) {
         this.authToken = authToken;
         ws.connect(data.gameID(), authToken);
-        gameData = data;
+        game = data.game();
+        gameID = data.gameID();
         playerColor = ChessGame.TeamColor.WHITE;
         observeLoop();
     }
@@ -132,13 +135,13 @@ public class GameLoop implements ServerMessageObserver {
     }
 
     private void redraw() {
-        var board = gameData.game().getBoard();
+        var board = game.getBoard();
         String boardString = BoardPrinter.getString(board, playerColor);
         System.out.println(boardString);
     }
 
     private void leave() {
-        ws.leave(gameData.gameID(), authToken);
+        ws.leave(gameID, authToken);
     }
 
     private void move() {
@@ -150,11 +153,11 @@ public class GameLoop implements ServerMessageObserver {
             return;
         }
 
-        ws.makeMove(gameData.gameID(), authToken, move);
+        ws.makeMove(gameID, authToken, move);
     }
 
     private void resign() {
-        ws.resign(gameData.gameID(), authToken);
+        ws.resign(gameID, authToken);
     }
 
     private void hint() {
@@ -165,7 +168,7 @@ public class GameLoop implements ServerMessageObserver {
             System.out.println(ERROR_TEXT+ "That is not a valid position");
             return;
         }
-        ChessBoard board = gameData.game().getBoard();
+        ChessBoard board = game.getBoard();
         ChessPiece piece = board.getPiece(pos);
         if (piece == null) {
             System.out.println(ERROR_TEXT+ "There is no piece at that position");
@@ -192,6 +195,7 @@ public class GameLoop implements ServerMessageObserver {
             case LOAD_GAME:
                 ChessBoard board = ((LoadGameMessage) message).getGame();
                 System.out.println(BoardPrinter.getString(board, playerColor));
+                game.setBoard(board);
                 break;
         }
     }

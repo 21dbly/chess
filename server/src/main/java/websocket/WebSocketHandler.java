@@ -76,9 +76,9 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
         // add session to connectionManager
         PlayerType playerType;
-        if (game.whiteUsername().equals(username) && !connections.hasWhite(gameID)) {
+        if (username.equals(game.whiteUsername()) && !connections.hasWhite(gameID)) {
             playerType = PlayerType.WHITE;
-        } else if (game.blackUsername().equals(username) && !connections.hasBlack(gameID)) {
+        } else if (username.equals(game.blackUsername()) && !connections.hasBlack(gameID)) {
             playerType = PlayerType.BLACK;
         } else {
             playerType = PlayerType.OBSERVER;
