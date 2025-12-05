@@ -137,7 +137,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         } else {
             teamColor = ChessGame.TeamColor.BLACK;
         }
-        if (!move.getMoveColor(game.getBoard()).equals(teamColor)) {
+        if (move.getMoveColor(game.getBoard()) != teamColor) {
             sendError(session, "That is not your piece");
             return;
         }

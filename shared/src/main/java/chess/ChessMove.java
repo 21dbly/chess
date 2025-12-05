@@ -27,6 +27,21 @@ public class ChessMove {
         this.promotionPiece = null;
     }
 
+    public static ChessMove parse(String input) {
+        String[] splinput = input.split(" ");
+        if (splinput.length < 2) {
+            return null;
+        }
+        var start = ChessPosition.parse(splinput[0]);
+        var end = ChessPosition.parse(splinput[1]);
+        if (start == null || end == null) {
+            return null;
+        }
+        return new ChessMove(start, end);
+
+        // need to implement promotion
+    }
+
     /**
      * @return ChessPosition of starting location
      */

@@ -1,9 +1,11 @@
 package serverfacade;
 
+import chess.ChessMove;
 import com.google.gson.Gson;
 import exceptions.ResponseException;
 import jakarta.websocket.*;
 import ui.ServerMessageObserver;
+import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
@@ -47,6 +49,33 @@ public class WebSocketFacade extends Endpoint {
     public void connect(int gameID, String authToken) {
         try {
             var command = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable to parse command: %s".formatted(ex.getMessage()));
+        }
+    }
+
+    public void leave(int gameID, String authToken) {
+        try {
+            var command = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, gameID);
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable to parse command: %s".formatted(ex.getMessage()));
+        }
+    }
+
+    public void resign(int gameID, String authToken) {
+        try {
+            var command = new UserGameCommand(UserGameCommand.CommandType.RESIGN, authToken, gameID);
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable to parse command: %s".formatted(ex.getMessage()));
+        }
+    }
+
+    public void makeMove(int gameID, String authToken, ChessMove move) {
+        try {
+            var command = new MakeMoveCommand(authToken, gameID, move);
             this.session.getBasicRemote().sendText(new Gson().toJson(command));
         } catch (IOException ex) {
             throw new RuntimeException("Unable to parse command: %s".formatted(ex.getMessage()));

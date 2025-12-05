@@ -1,9 +1,6 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 import exceptions.ResponseException;
 import model.GameData;
 import serverfacade.WebSocketFacade;
@@ -22,6 +19,7 @@ public class GameLoop implements ServerMessageObserver {
     private GameData gameData;
     private ChessGame.TeamColor playerColor;
     private final WebSocketFacade ws;
+    private String authToken;
 
     public GameLoop(Scanner scanner, String serverUrl) throws ResponseException {
         this.scanner = scanner;
@@ -29,6 +27,7 @@ public class GameLoop implements ServerMessageObserver {
     }
 
     public void joinGame(GameData data, ChessGame.TeamColor color, String authToken) {
+        this.authToken = authToken;
         ws.connect(data.gameID(), authToken);
         gameData = data;
         playerColor = color;
@@ -36,6 +35,7 @@ public class GameLoop implements ServerMessageObserver {
     }
 
     public void observeGame(GameData data, String authToken) {
+        this.authToken = authToken;
         ws.connect(data.gameID(), authToken);
         gameData = data;
         playerColor = ChessGame.TeamColor.WHITE;
@@ -138,12 +138,23 @@ public class GameLoop implements ServerMessageObserver {
     }
 
     private void leave() {
+        ws.leave(gameData.gameID(), authToken);
     }
 
     private void move() {
+        System.out.print(RESET_TEXT+"Enter a move (for example e2 e4): ");
+        String input = scanner.nextLine();
+        ChessMove move = ChessMove.parse(input);
+        if (move == null) {
+            System.out.println(ERROR_TEXT+ "Please type a move of the form 'e2 e4'");
+            return;
+        }
+
+        ws.makeMove(gameData.gameID(), authToken, move);
     }
 
     private void resign() {
+        ws.resign(gameData.gameID(), authToken);
     }
 
     private void hint() {
