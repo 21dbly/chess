@@ -157,6 +157,10 @@ public class GameLoop implements ServerMessageObserver {
     }
 
     private void resign() {
+        System.out.println("Are you sure you want to resign? (y/n)");
+        if (!scanner.nextLine().equalsIgnoreCase("y")) {
+            return;
+        }
         ws.resign(gameID, authToken);
     }
 
@@ -194,7 +198,7 @@ public class GameLoop implements ServerMessageObserver {
                 break;
             case LOAD_GAME:
                 ChessBoard board = ((LoadGameMessage) message).getGame();
-                System.out.println(BoardPrinter.getString(board, playerColor));
+                System.out.println('\n'+BoardPrinter.getString(board, playerColor));
                 game.setBoard(board);
                 break;
         }
