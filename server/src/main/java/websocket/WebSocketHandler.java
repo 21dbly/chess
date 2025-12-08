@@ -164,13 +164,15 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         // notify of checks
         ChessGame.TeamColor opposite = teamColor.opposite();
         if (game.isInCheckmate(opposite)) {
-            connections.broadcast(gameID, new NotificationMessage("%s is in checkmate.".formatted(opposite.name())), null);
+            notifyString = "%s (%s) is in checkmate.".formatted(gameData.getUsername(opposite), opposite.name());
+            connections.broadcast(gameID, new NotificationMessage(notifyString), null);
         }
         else if (game.isInCheck(opposite)) {
-            connections.broadcast(gameID, new NotificationMessage("%s is in check.".formatted(opposite.name())), null);
+            notifyString = "%s (%s) is in check.".formatted(gameData.getUsername(opposite), opposite.name());
+            connections.broadcast(gameID, new NotificationMessage(notifyString), null);
         }
         else if (game.isInStalemate(opposite)) {
-            connections.broadcast(gameID, new NotificationMessage("%s is in stalemate.".formatted(opposite.name())), null);
+            connections.broadcast(gameID, new NotificationMessage("Stalemate!"), null);
         }
     }
 
