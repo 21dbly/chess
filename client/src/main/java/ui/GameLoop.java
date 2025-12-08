@@ -173,12 +173,7 @@ public class GameLoop implements ServerMessageObserver {
             return;
         }
         ChessBoard board = game.getBoard();
-        ChessPiece piece = board.getPiece(pos);
-        if (piece == null) {
-            System.out.println(ERROR_TEXT+ "There is no piece at that position");
-            return;
-        }
-        var moves = piece.pieceMoves(board, pos);
+        var moves = game.validMoves(pos);
 
         String boardString = BoardPrinter.getString(board, playerColor, pos, moves);
         System.out.println(boardString);
