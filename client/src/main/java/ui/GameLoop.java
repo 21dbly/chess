@@ -157,7 +157,7 @@ public class GameLoop implements ServerMessageObserver {
     }
 
     private void resign() {
-        System.out.println("Are you sure you want to resign? (y/n)");
+        System.out.println(RESET_TEXT+ "Are you sure you want to resign? (y/n)");
         if (!scanner.nextLine().equalsIgnoreCase("y")) {
             return;
         }
