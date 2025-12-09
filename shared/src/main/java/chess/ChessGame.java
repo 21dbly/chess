@@ -126,44 +126,6 @@ public class ChessGame {
     }
 
     /**
-     * if startPosition has a pawn and prevMove was moving a pawn 2 in a different column,
-     * this returns a new board with state as if the last pawn had only moved 1
-     *
-     * @param startPosition the position the piece is in
-     * @return a new board copy if an enPassant could happen, or the old board
-     */
-    private ChessBoard getEnPassantReadyBoard(ChessPosition startPosition)
-    {
-        if (prevMove == null) {
-            return board; // first move can't be en passant
-        }
-        if (board.getPiece(startPosition).getPieceType() != ChessPiece.PieceType.PAWN) {
-            return board; // current piece has to be a pawn for this to matter
-        }
-        if (board.getPiece(prevMove.getEndPosition()).getPieceType() != ChessPiece.PieceType.PAWN) {
-            return board; // previous moved piece too
-        }
-
-        int prevMoveStartRow = prevMove.getStartPosition().getRow();
-        int prevMoveEndRow = prevMove.getEndPosition().getRow();
-        if (Math.abs(prevMoveEndRow - prevMoveStartRow) != 2) {
-            return board; // prev pawn has to have moved 2
-        }
-
-        int prevMoveCol = prevMove.getEndPosition().getColumn();
-        if (prevMoveCol == startPosition.getColumn()) {
-            return board; // wouldn't work if attacking pawn is in the same col
-        }
-        int inBetweenRow = (prevMoveStartRow + prevMoveEndRow) / 2;
-
-        ChessBoard copy = new ChessBoard(board);
-        // move pawn back 1
-        copy.movePiece(new ChessMove(prevMove.getEndPosition(), new ChessPosition(inBetweenRow, prevMoveCol)));
-
-        return copy;
-    }
-
-    /**
      * Makes a move in a chess game (if move is valid and it's the correct team turn)
      *
      * @param move chess move to perform

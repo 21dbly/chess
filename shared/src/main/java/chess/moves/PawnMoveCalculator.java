@@ -45,10 +45,10 @@ public class PawnMoveCalculator extends PieceMoveCalculator{
             }
             var piece = board.getPiece(pos);
             if (piece == null) {
-                return list;
+                continue;
             }
             if (piece.getPieceType() != ChessPiece.PieceType.PAWN) {
-                return list; // has to be pawn next to it
+                continue; // has to be pawn next to it
             }
             if (prevMove.getEndPosition().equals(pos) // neighbor pawn was just moved
                     && prevMove.getStartPosition().getRow() == pos.getRow() + 2 * forwards) { // neighbor pawn moved 2
