@@ -77,9 +77,7 @@ public class ChessGame {
 
         if (piece == null) { return validMoves; }
 
-        ChessBoard enPassantReadyBoard = getEnPassantReadyBoard(startPosition);
-
-        Collection<ChessMove> moves = piece.pieceMoves(enPassantReadyBoard, startPosition);
+        Collection<ChessMove> moves = piece.pieceMoves(board, startPosition, prevMove);
         for (ChessMove move : moves) {
             ChessBoard boardCopy = new ChessBoard(board);
             boardCopy.movePiece(move);

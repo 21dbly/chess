@@ -37,9 +37,16 @@ public class ChessMove {
         if (start == null || end == null) {
             return null;
         }
-        return new ChessMove(start, end);
-
-        // need to implement promotion
+        if (splinput.length == 2) {
+            return new ChessMove(start, end);
+        }
+        ChessPiece.PieceType promotion;
+        if (splinput[2].length() == 1) {
+            promotion = ChessPiece.typeFromChar(splinput[2].charAt(0));
+        } else {
+            promotion = ChessPiece.typeFromString(splinput[2]);
+        }
+        return new ChessMove(start, end, promotion);
     }
 
     /**

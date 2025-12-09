@@ -149,7 +149,7 @@ public class GameLoop implements ServerMessageObserver {
         String input = scanner.nextLine();
         ChessMove move = ChessMove.parse(input);
         if (move == null) {
-            System.out.println(ERROR_TEXT+ "Please type a move of the form 'e2 e4'");
+            System.out.println(ERROR_TEXT+"Please type a move of the form 'e2 e4' or like 'e7 e8 queen' for promotions");
             return;
         }
 
@@ -192,9 +192,10 @@ public class GameLoop implements ServerMessageObserver {
                 System.out.println(ERROR_TEXT+ messageStr);
                 break;
             case LOAD_GAME:
-                ChessBoard board = ((LoadGameMessage) message).getGame();
+                ChessGame game = ((LoadGameMessage) message).getGame();
+                this.game = game;
+                ChessBoard board = game.getBoard();
                 System.out.println('\n'+BoardPrinter.getString(board, playerColor));
-                game.setBoard(board);
                 break;
         }
     }

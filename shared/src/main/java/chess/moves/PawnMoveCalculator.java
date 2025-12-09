@@ -5,7 +5,7 @@ import chess.*;
 import java.util.*;
 
 public class PawnMoveCalculator extends PieceMoveCalculator{
-    public static Collection<ChessMove> calculateMoves(ChessBoard board, ChessPosition myPosition)
+    public static Collection<ChessMove> calculateMoves(ChessBoard board, ChessPosition myPosition, ChessMove prevMove)
     {
         ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
         int forwards = color == ChessGame.TeamColor.WHITE ? 1 : -1;
@@ -23,7 +23,44 @@ public class PawnMoveCalculator extends PieceMoveCalculator{
                 new int[][] {{forwards, 0}}, forwardDistance,
                 new MoveStatus[] {MoveStatus.CAN_MOVE}));
 
+        list.addAll(enPassant(board, myPosition, prevMove));
+
         return withPromotions(list, color);
+    }
+
+    private static Collection<ChessMove> enPassant(ChessBoard board, ChessPosition myPosition, ChessMove prevMove) {
+        var list = new ArrayList<ChessMove>();
+        ChessGame.TeamColor color = board.getPiece(myPosition).getTeamColor();
+        int forwards = color == ChessGame.TeamColor.WHITE ? 1 : -1;
+
+        if (prevMove == null) {
+            return list; // enPassant can't happen on first move
+        }
+
+        ChessPosition left = myPosition.plus(0, -1);
+        ChessPosition right = myPosition.plus(0, 1);
+        for( ChessPosition pos : new ChessPosition[]{left, right}) {
+            if (!board.inBounds(pos)) {
+                continue;
+            }
+            var piece = board.getPiece(pos);
+            if (piece == null) {
+                return list;
+            }
+            if (piece.getPieceType() != ChessPiece.PieceType.PAWN) {
+                return list; // has to be pawn next to it
+            }
+            if (prevMove.getEndPosition().equals(pos) // neighbor pawn was just moved
+                    && prevMove.getStartPosition().getRow() == pos.getRow() + 2 * forwards) { // neighbor pawn moved 2
+                list.add(new ChessMove(myPosition, pos.plus(forwards, 0)));
+                return list;
+            }
+        }
+        return list;
+    }
+
+    public static Collection<ChessMove> calculateMoves(ChessBoard board, ChessPosition myPosition) {
+        return calculateMoves(board, myPosition, null);
     }
 
     private static Collection<ChessMove> withPromotions(Collection<ChessMove> list, ChessGame.TeamColor color) {

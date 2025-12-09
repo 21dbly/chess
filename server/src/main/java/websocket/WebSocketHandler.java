@@ -86,7 +86,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         connections.add(gameID, session, playerType);
 
         // send load game message to root
-        String loadMessage = new LoadGameMessage(game.game().getBoard()).toString();
+        String loadMessage = new LoadGameMessage(game.game()).toString();
         session.getRemote().sendString(loadMessage);
 
         // broadcast to others
@@ -154,7 +154,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         gameDAO.updateGame(gameData);
 
         // broadcast messages
-        var loadMessage = new LoadGameMessage(game.getBoard());
+        var loadMessage = new LoadGameMessage(game);
         connections.broadcast(gameID, loadMessage, null);
 
         String notifyString = "'%s' has made the move %s.".formatted(username, move.toString());

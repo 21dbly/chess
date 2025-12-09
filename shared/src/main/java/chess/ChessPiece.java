@@ -46,6 +46,30 @@ public class ChessPiece {
         }
     }
 
+    public static PieceType typeFromChar(char c) {
+        return switch (Character.toUpperCase(c)) {
+            case 'P' -> ChessPiece.PieceType.PAWN;
+            case 'R' -> ChessPiece.PieceType.ROOK;
+            case 'N' -> ChessPiece.PieceType.KNIGHT;
+            case 'B' -> ChessPiece.PieceType.BISHOP;
+            case 'Q' -> ChessPiece.PieceType.QUEEN;
+            case 'K' -> ChessPiece.PieceType.KING;
+            default -> null;
+        };
+    }
+
+    public static PieceType typeFromString(String s) {
+        return switch (s.toLowerCase()) {
+            case "pawn" -> ChessPiece.PieceType.PAWN;
+            case "rook" -> ChessPiece.PieceType.ROOK;
+            case "knight" -> ChessPiece.PieceType.KNIGHT;
+            case "bishop" -> ChessPiece.PieceType.BISHOP;
+            case "queen" -> ChessPiece.PieceType.QUEEN;
+            case "king" -> ChessPiece.PieceType.KING;
+            default -> null;
+        };
+    }
+
 
     /**
      * @return Which team this chess piece belongs to
@@ -68,15 +92,19 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition, ChessMove previousMove) {
         return switch (getPieceType()) {
             case KING -> KingMoveCalculator.calculateMoves(board, myPosition);
             case QUEEN -> QueenMoveCalculator.calculateMoves(board, myPosition);
             case BISHOP -> BishopMoveCalculator.calculateMoves(board, myPosition);
             case KNIGHT -> KnightMoveCalculator.calculateMoves(board, myPosition);
             case ROOK -> RookMoveCalculator.calculateMoves(board, myPosition);
-            case PAWN -> PawnMoveCalculator.calculateMoves(board, myPosition);
+            case PAWN -> PawnMoveCalculator.calculateMoves(board, myPosition, previousMove);
         };
+    }
+
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        return pieceMoves(board, myPosition, null);
     }
 
     public void promote(PieceType type) {
